@@ -46,13 +46,6 @@ h2
   overflow-y: auto;
 }
 
-.about-page
-{
-  text-align: center;
-  font-size: 40px;
-  text-shadow: 4px 4px 4px #000000;
-}
-
 .cont
 {
   text-align: center;
@@ -61,6 +54,10 @@ h2
   flex-direction: column;
   align-items: center;
   align-content: center;
+}
+
+input:focus{
+  outline: none;
 }
 
 .option
@@ -150,6 +147,7 @@ h2
   margin-left: 10%;
   margin-top: 10%;
   text-align: center;
+  height: 20%;
 }
 
 .form{
@@ -372,6 +370,12 @@ h2
   }
 }
 
+@media screen and (max-height: 750px){
+  .help-content{
+    top:70%;
+  }
+}
+
 @media screen and (max-height: 550px) and (max-width: 900px){
   .title
   {
@@ -393,6 +397,10 @@ h2
 
   .about-content{
     top:90vh;
+  }
+
+  .help-content{
+    top:110%;
   }
 
   header
@@ -448,6 +456,10 @@ h2
     overflow-y: auto;
   }
 
+  .help-content{
+    top:110%;
+  }
+
   header
 {
   height: 10vh;
@@ -455,6 +467,12 @@ h2
   align-content: center;
   justify-content: center;
 }
+}
+
+@media screen and(max-height: 420px){
+  .help-content{
+    padding-top: 20vh;
+  }
 }
 
 @media screen and (max-height:300px){
@@ -472,6 +490,10 @@ h2
     text-align: center;
     overflow-x: hidden;
     overflow-y: auto;
+  }
+
+  .help-content{
+    top:140%;
   }
 
   .home-content{
