@@ -38,6 +38,7 @@ h2
 .content {
   position: absolute;
   width: 90%;
+  height: 80vh;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -138,16 +139,15 @@ input:focus{
 
   .title-1{
     font-size: 40px;
-    padding-top: 10%;
+    padding-top: 5%;
   }
   .text
 {
   font-size: 18px;
   margin-right: 10%;
   margin-left: 10%;
-  margin-top: 10%;
+  margin-top: 5%;
   text-align: center;
-  height: 20%;
 }
 
 .form{
@@ -304,10 +304,6 @@ input:focus{
   text-align: center;
 }
 
-.about-content{
-    top: 70%;
-}
-
 .form{
   display: flex;
   flex-direction: column;
@@ -354,53 +350,13 @@ input:focus{
     justify-content: space-between;
   }
   
-  .content {
-    position: absolute;
-    width: 90%;
-    top: 60vh;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
-
-  .about-content{
-    top: 90%
-  }
 }
 
-@media screen and (max-height: 750px){
-  .help-content{
-    top:70%;
-  }
-}
 
 @media screen and (max-height: 550px) and (max-width: 900px){
   .title
   {
     font-size: 32px;
-  }
-  
-  .content {
-    position: absolute;
-    width: 90%;
-    top: 60vh;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    overflow-x: hidden;
-    overflow-y: auto;
-    align-items: center;
-  align-content: center;
-  }
-
-  .about-content{
-    top:90vh;
-  }
-
-  .help-content{
-    top:110%;
   }
 
   header
@@ -444,21 +400,6 @@ input:focus{
   {
     font-size: 32px;
   }
-  
-  .content {
-    position: absolute;
-    width: 90%;
-    top: 60vh;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
-
-  .help-content{
-    top:110%;
-  }
 
   header
 {
@@ -469,37 +410,12 @@ input:focus{
 }
 }
 
-@media screen and(max-height: 420px){
-  .help-content{
-    padding-top: 20vh;
-  }
-}
-
 @media screen and (max-height:300px){
   .title
   {
     font-size: 32px;
   }
   
-  .content {
-    position: absolute;
-    width: 90%;
-    top: 120vh;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
-
-  .help-content{
-    top:140%;
-  }
-
-  .home-content{
-    top :50vh;
-  }
-
   header
 {
   height: 10vh;
