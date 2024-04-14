@@ -1,0 +1,129 @@
+*
+{
+  font-family: 'Times New Roman', Times, serif;
+  color: #e5e0e0;
+}
+
+body
+{
+  height: 150vh;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.489), rgba(0, 0, 0, 0.594)), url(imagini/city.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+#index
+{
+  height: 100vh;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.489), rgba(0, 0, 0, 0.594)), url(imagini/city.jpg);
+  overflow-y: hidden;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+
+h1
+{
+  text-align: center;
+  font-weight: 200;
+  font-size: 50px;
+  text-shadow: 4px 3px 3px #000000;
+}
+
+h2
+{
+  text-align: center;
+  font-size: 24px;
+  text-shadow: 5px 4px 4px black;
+}
+
+.home-page {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.menu
+{
+  text-align: center;
+  margin: 60px 20px;
+}
+
+.option
+{
+  /* padding-top: 50px; */
+  padding-right: 20px;
+  text-align: center;
+  font-weight:800;
+  text-shadow: 3px 2px 2px #000000;
+  text-decoration: none;
+}
+
+.option:hover
+{
+  color: #d4a690;
+}
+
+.current-page
+{
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+}
+
+.about-page
+{
+  text-align: center;
+  font-size: 40px;
+  text-shadow: 4px 4px 4px #000000;
+}
+
+#button
+{
+  font-size: 24px;
+  background-color: rgba(0, 0, 0, 0.550);
+  border: 2px solid #d4a690;
+  border-radius: 8px;
+  padding: 5px 10px;
+  margin: 0 auto;
+}
+
+#button:hover
+{
+  cursor: pointer;
+  color: #d4a690;
+}
+
+#button:active {
+  transform: translateY(2px);
+}
+
+@media screen and (max-width: 800px) {
+  .content
+{
+  font-size: 18px;
+  margin-right: 10%;
+  margin-left: 10%;
+  text-align: center;
+}
+}
+
+@media screen and (min-width: 1000px) {
+  .content
+{
+  font-size: 24px;
+  margin-right: 10%;
+  margin-left: 10%;
+  text-align: center;
+}
+}
+
+@media screen and (max-width: 600px) {
+  .title
+  {
+    font-size: 32px;
+  }
+}
