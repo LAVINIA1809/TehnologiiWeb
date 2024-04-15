@@ -6,7 +6,7 @@
 
 body
 {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.489), rgba(0, 0, 0, 0.594)), url(imagini/city.jpg);
+  background-image: linear-gradient(rgba(0, 0, 0, 0.630), rgba(0, 0, 0, 0.730)), url(imagini/city.jpg);
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
