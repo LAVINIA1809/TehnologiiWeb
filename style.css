@@ -121,7 +121,7 @@ h2
   height:auto;
 }
 
-#button
+.button
 {
   font-size: 24px;
   background-color: rgba(0, 0, 0, 0.550);
@@ -131,13 +131,13 @@ h2
   margin: 0 auto;
 }
 
-#button:hover
+.button:hover
 {
   cursor: pointer;
   color: #d4a690;
 }
 
-#button:active {
+.button:active {
   transform: translateY(2px);
 }
 
