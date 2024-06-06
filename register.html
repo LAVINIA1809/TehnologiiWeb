@@ -12,9 +12,9 @@
 
     <header>
         <div class="menu">
-            <a class="option" href="index.html"> HOME </a>
-            <a class="option" href=""> ADD </a>
-            <a class="option" href="help.html"> HELP </a>
+            <a class="option" href="homeLogged.html"> HOME </a>
+            <a class="option" href="addEvent.html"> ADD EVENT </a>
+            <a class="option" href="admin.html"> HELP </a>
             <a class="option current-page" href="register.html"> REGISTER </a>
         </div>
     </header>
@@ -23,15 +23,15 @@
         <h1 class="title"> Register a new administrator account </h1>
             
         <div class="cont">
-            <form class="form">
+            <form class="form" id="registerForm">
                 <div class="group">
                     <label for="name" class="lable">First Name:</label>
-                    <input class="input" type="name" id="name" name="first name" required>                    
+                    <input class="input" type="name" id="fname" name="first name" required>                    
                 </div>
 
                 <div class="group">
                     <label for="name" class="lable">Last Name:</label>
-                    <input class="input" type="name" id="name" name="last name" required>                    
+                    <input class="input" type="name" id="lname" name="last name" required>                    
                 </div>
 
                 <div class="group">
@@ -41,7 +41,7 @@
             
                 <div class="group">
                     <label for="registraiton number" class="lable">Registration Number:</label>
-                    <input class="input" type="registration number" id="registration number" name="registration number" required>                    
+                    <input class="input" type="registration number" id="regNumber" name="registration number" required>                    
                 </div>
 
                 <div class="group">
@@ -56,6 +56,38 @@
 
     </div>
  
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // prevenim trimiterea formularului tradițional
+
+            const first_name = document.getElementById('fname').value;
+            const last_name = document.getElementById('lname').value;
+            const email = document.getElementById('email').value;
+            const reg_numeber = document.getElementById('regNumber').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('http://localhost:8000/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ first_name, last_name, email, reg_number, password })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Register successful. A new account has been created', data);
+                    window.location.href = 'successRegister.html';
+                } else {
+                    console.error('Register failed', response.statusText);
+                }
+            } catch (error) {
+                console.error('Eroare:', error);
+            }
+        });
+    </script>
+
  </body>
 
 </html>

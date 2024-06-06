@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Global Terrorism </title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+
+    <header>
+        <div class="menu">
+            <a class="option" href="homeLogged.html"> HOME </a>
+            <a class="option current-page" href="addEvent.html"> ADD EVENT </a>
+            <a class="option" href="admin.html"> ADMIN </a>
+            <a class="option" href="register.html"> REGISTER </a>
+        </div>
+    </header>
+     
+    <div class="content">
+        <h1 class="title"> Upload a new event data </h1>
+            
+        <div class="cont">
+            <form class="form" id="addEvent">
+                <div class="group">
+                    <label for="region" class="lable">Region:</label>
+                    <input class="input" type="name" id="region" name="region" required>                    
+                </div>
+
+                <div class="group">
+                    <label for="country" class="lable">Country:</label>
+                    <input class="input" type="name" id="country" name="country" required>                    
+                </div>
+
+                <div class="group">
+                    <label for="state" class="lable">State:</label>
+                    <input class="input" type="name" id="state" name="state" required>                    
+                </div>
+
+                <div class="group">
+                    <label for="email" class="lable">City:</label>
+                    <input class="input" type="email" id="city" name="city" required>                    
+                </div>
+            
+                <div class="group">
+                    <label for="registraiton number" class="lable">Latitude:</label>
+                    <input class="input" id="latitude" name="latitude" required>                    
+                </div>
+
+                <div class="group">
+                    <label for="password" class="lable">Longitude:</label>
+                    <input class="input" id="longitude" name="longitude" required>
+                </div>
+
+                <div class="group">
+                    <label for="date" class="lable">Date:</label>
+                    <input class="input" type="date" id="date" name="date" required>
+                </div>
+
+                <div class="group">
+                    <label for="type" class="lable">Attack Type:</label>
+                    <input class="input" id="type" name="type" required>
+                </div>
+
+                <div class="group" style="margin-bottom:13vh;">
+                    <label for="summary" class="lable">Summary:</label>
+                    <textarea id="summary" name="summary" style="height: 80px;
+                    width: 420px; font-size:16px;"></textarea>
+                </div>
+
+                <div class="group">
+                    <label for="target" class="lable">Target:</label>
+                    <input class="input" id="target" name="target" required>
+                </div>
+
+                <div class="group">
+                    <label for="sub-target" class="lable">Subtarget:</label>
+                    <input class="input" id="subtarget" name="sub-target" required>
+                </div>
+
+                <div class="group">
+                    <label for="corp" class="lable">Corp:</label>
+                    <input class="input" id="corp" name="corp" required>
+                </div>
+
+                <div class="group">
+                    <label for="spec-target" class="lable">Specific target:</label>
+                    <input class="input" id="spec_target" name="spec-target" required>
+                </div>
+
+                <div class="group">
+                    <label for="criminal" class="lable">Criminal:</label>
+                    <input class="input" id="criminal" name="criminal" required>
+                </div>
+
+                <div class="group">
+                    <label for="motive" class="lable">Motive:</label>
+                    <textarea id="motive" name="motive" style="height: 80px;
+                    width: 420px;"></textarea>
+                </div>
+            </form>
+
+            <button class="submit-button">Submit</button>
+        </div>
+    </div>
+ 
+    <script>
+        document.getElementById('addEvent').addEventListener('submit', async function(event) {
+            event.preventDefault(); // prevenim trimiterea formularului tradițional
+
+            const region = document.getElementById('region').value;
+            const country = document.getElementById('country').value;
+            const state = document.getElementById('state').value;
+            const city = document.getElementById('city').value;
+            const latitude = document.getElementById('latitude').value;
+            const longitude = document.getElementById('longitude').value;
+            const date = document.getElementById('date').value;
+            const attack_type = document.getElementById('type').value;
+            const summary = document.getElementById('summary').value;
+            const target = document.getElementById('target').value;
+            const subtarget = document.getElementById('subtarget').value;
+            const corp = document.getElementById('corp').value;
+            const spec_target = document.getElementById('spec_target').value;
+            const criminal = document.getElementById('criminal').value;
+            const motive = document.getElementById('motive').value;
+
+            try {
+                const response = await fetch('http://localhost:8000/addEvent', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ region, country, state, city, latitude, longitude, date, 
+                        attack_type, summary, target, subtarget, corp, spec_target, criminal, motive })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('New event created', data);
+                    window.location.href = 'successUpload.html';
+                } else {
+                    console.error('Upload failed', response.statusText);
+                }
+            } catch (error) {
+                console.error('Eroare:', error);
+            }
+        });
+    </script>
+
+ </body>
+
+</html>
