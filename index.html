@@ -20,10 +20,23 @@
     </header>
 
     <div class="content home-content">
-    <h1 class="title"> GLOBAL TERRORISM </h1>
-    <button class="button" onclick="window.location.href='explore.html'">
-        Explore terrorism events throughout history </button>
+        <h1 class="title"> GLOBAL TERRORISM </h1>
+        <button class="button" onclick="window.location.href='explore.html'">
+            Explore terrorism events throughout history </button>
+
+            <div class="chart-container">
+                <canvas id="canvas1"></canvas>
+                <canvas id="canvas2"></canvas>
+                <canvas id="canvas3"></canvas>
+                <canvas id="canvas4"></canvas>
+                <canvas id="canvas5"></canvas>
+                <canvas id="canvas6"></canvas>
+            </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="data.js"></script>
+    <script src="charts.js"></script>
 
     </body>
 </html>

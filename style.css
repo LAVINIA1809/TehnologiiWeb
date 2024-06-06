@@ -526,3 +526,10 @@ h2
     font-size: 32px;
   }
 }
+
+.chart-container{
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px;
+  gap: 20px;
+}
