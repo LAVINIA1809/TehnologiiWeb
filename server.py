@@ -172,7 +172,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                     'status': 'success'
                 }
             else:
-                self.send_response(401)  # Unauthorized
+                self.send_response(401)
                 self._set_cors_headers()
                 self.send_header('Content-Type', 'application/json')
                 self.end_headers()
@@ -188,119 +188,119 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                     
             self.wfile.write(json.dumps(response).encode('utf-8'))
 
-            # cur.close()
-            # conn.close()
         elif self.path == "/register":
-            pass
+            content_length = int(self.headers['Content-Length'])
+            post_data = self.rfile.read(content_length)
+            data = json.loads(post_data)
+
+            first_name = data.get('first_name')
+            last_name = data.get('last_name')
+            email = data.get('email')
+            reg_number = data.get('reg_number')
+            password = data.get('password')
+
+            try:
+                query = "INSERT INTO users (firstname, lastname, email, regnum, password) VALUES (%s, %s, %s, %s, %s)"
+                cur.execute(query, (first_name, last_name, email, reg_number, password))
+                conn.commit()
+
+                response = {
+                    'message': 'Registration successful!',
+                    'status': 'success'
+                }
+                self.send_response(200)
+            except Exception as e:
+                response = {
+                    'message': 'Registration failed: ' + str(e),
+                    'status': 'fail'
+                }
+                self.send_response(500)
+            finally:
+                self._set_cors_headers()
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps(response).encode('utf-8'))
             
         elif self.path == "/addEvent":
-            pass
+            content_length = int(self.headers['Content-Length'])
+            post_data = self.rfile.read(content_length)
+            data = json.loads(post_data)
+
+            region = data.get('region')
+            country = data.get('country')
+            state = data.get('state')
+            city = data.get('city')
+            latitude = data.get('latitude')
+            longitude = data.get('longitude')
+            date = data.get('date')
+            attack_type = data.get('attack_type')
+            summary = data.get('summary')
+            target = data.get('target')
+            subtarget = data.get('subtarget')
+            corp = data.get('corp')
+            spec_target = data.get('spec_target')
+            criminal = data.get('criminal')
+            motive = data.get('motive')
+
+            try:
+                query_region = "INSERT INTO regions (name) VALUES (%s) RETURNING id"
+                cur.execute(query_region, (region,))
+                region_id = cur.fetchone()[0]
+
+                query_country = "INSERT INTO countries (name, region_id) VALUES (%s, %s) RETURNING id"
+                cur.execute(query_country, (country, region_id))
+                country_id = cur.fetchone()[0]
+
+                query_provstate = "INSERT INTO provstates (name, country_id) VALUES (%s, %s) RETURNING id"
+                cur.execute(query_provstate, (state, country_id))
+                state_id = cur.fetchone()[0]
+
+                query_city = "INSERT INTO cities (name, provstate_id, country_id, lat, long) VALUES (%s, %s, %s, %s, %s) RETURNING id"
+                cur.execute(query_city, (city, state_id, country_id, latitude, longitude))
+                city_id = cur.fetchone()[0]
+
+                # query_attack_type = "INSERT INTO attack (name) VALUES (%s) RETURNING id"
+                # cur.execute(query_attack_type, (attack_type,))
+                # attack_type_id = cur.fetchone()[0]
+
+                query_target_type = "INSERT INTO target (name) VALUES (%s) RETURNING id"
+                cur.execute(query_target_type, (target,))
+                target_type_id = cur.fetchone()[0]
+
+                query_subtarget = "INSERT INTO subtarget (name, target_type) VALUES (%s, %s) RETURNING id"
+                cur.execute(query_subtarget, (subtarget, target_type_id))
+                subtarget_type_id = cur.fetchone()[0]
+
+                query_event = """
+                INSERT INTO events (date, city_id, summary, attack_type, target_type, subtarget_type, corp, spec_target, criminal, motive)
+                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    """
+                cur.execute(query_event, (date, city_id, summary, attack_type,
+                          target, subtarget, corp,
+                          spec_target, criminal, motive))
+                conn.commit()
+
+                response = {
+                    'message': 'Upload successful!',
+                    'status': 'success'
+                }
+                self.send_response(200)
+            except Exception as e:
+                response = {
+                    'message': 'Upload failed: ' + str(e),
+                    'status': 'fail'
+                }
+                self.send_response(500)
+            finally:
+                self._set_cors_headers()
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps(response).encode('utf-8'))
         else:
             self.send_response(400)
             self._set_cors_headers()
             self.end_headers()
             self.wfile.write(b'400 - Bad Request')
-        # if "/books" == self.path:
-        #     try:
-
-        #         books = db.books
-        #         book = books.find()
-        #         list_cur = list(book)
-
-        #         if not list_cur:
-        #             self.send_response(404)
-        #             self.send_header('Content-type', 'application/json')
-        #             self.end_headers()
-        #             self.wfile.write(b'404 - Not Found')
-
-        #         else:
-        #             try:
-        #                 content_type = self.headers.get('Content-Type')
-
-        #                 if content_type != 'application/json':
-        #                     self.send_response(415)
-        #                     self.send_header('Content-type', 'application/json')
-        #                     self.end_headers()
-        #                     self.wfile.write(b'{"Error": "Data interchange format is JSON."}')
-
-        #                 else:
-        #                     print("ok")
-        #                     content_len = int(self.headers.get('Content-Length'))
-        #                     post_body = self.rfile.read(content_len)
-        #                     post_body_str = post_body.decode('utf-8')
-        #                     print(post_body_str)
-
-
-        #                     #if(not re.match(r"""{\s"title":\s\w+,\s"author":\s\w+,\s"genre":\s\w+,\s"index":\s\d+\s}""", post_body_str)):
-        #                     #    self.send_response(417)
-        #                      #   self.send_header('Content-type', 'application/json')
-        #                       #  self.end_headers()
-        #                        # self.wfile.write(b'417 - Expectation Failed')
-
-
-        #                     #else:
-        #                     ok = 1 #self.findObject(post_body_str)
-        #                     print("am executat functia")
-        #                     if ok == 0:
-        #                         print("nu e bn")
-        #                         self.send_response(409)
-        #                         self.send_header('Content-type', 'application/json')
-        #                         self.end_headers()
-        #                         self.wfile.write(b'409 - Conflict')
-
-        #                     else:
-        #                         print("e bine")
-        #                         data = json.loads(post_body_str)
-        #                         books.insert_one(data)
-
-        #                         print("am inserat")
-        #                         #json_data = dumps(post_body_str, indent=2)
-        #                         i = post_body_str.find("""index":""")
-        #                         j = post_body_str.index("\n", i)
-        #                         index = post_body_str[i + 8:j - 1:]
-        #                         with open("sample.json", "w") as outfile:
-        #                             outfile.write(f"/book/{index}")
-
-        #                         print("ok")
-        #                         file_to_open = open("sample.json").read()
-        #                         self.send_response(200)
-        #                         self.send_header('Content-type', 'application/json')
-        #                         self.end_headers()
-        #                         self.wfile.write(bytes(file_to_open, 'utf-8'))
-        #                         print("gata")
-
-        #             except Exception as e:
-        #                 print(e)
-        #                 self.send_response(500)
-        #                 self.send_header('Content-type', 'application/json')
-        #                 self.end_headers()
-        #                 self.wfile.write(b'500 - Internal Server Error1')
-
-        #     except:
-        #         self.send_response(500)
-        #         self.send_header('Content-type', 'application/json')
-        #         self.end_headers()
-        #         self.wfile.write(b'500 - Internal Server Error2')
-
-        # elif re.match(r"/book/\d+", self.path):
-        #     try:
-        #         self.send_response(400)
-        #         self.send_header('Content-type', 'application/json')
-        #         self.end_headers()
-        #         self.wfile.write(b'400 - Bad Request')
-
-        #     except:
-        #         self.send_response(500)
-        #         self.send_header('Content-type', 'application/json')
-        #         self.end_headers()
-        #         self.wfile.write(b'500 - Internal Server Error')
-
-        # else:
-        #     self.send_response(400)
-        #     self.send_header('Content-type', 'application/json')
-        #     self.end_headers()
-        #     self.wfile.write(b'400 - Bad Request')
-
 
     def do_PUT(self):
         if "/books" == self.path:
@@ -425,4 +425,6 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 httpd = HTTPServer(('', 8000), SimpleHTTPRequestHandler)
 print("The server is listening...")
 httpd.serve_forever()
+cur.close()
+conn.close()
 

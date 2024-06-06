@@ -14,7 +14,7 @@
         <div class="menu">
             <a class="option" href="homeLogged.html"> HOME </a>
             <a class="option" href="addEvent.html"> ADD EVENT </a>
-            <a class="option" href="admin.html"> HELP </a>
+            <a class="option" href="admin.html"> ADMIN </a>
             <a class="option current-page" href="register.html"> REGISTER </a>
         </div>
     </header>
@@ -48,22 +48,19 @@
                     <label for="password" class="lable">Password:</label>
                     <input class="input" type="password" id="password" name="password" required>
                 </div>
+                <button type="submit" class="submit-button">Submit</button>
             </form>
-
-            <button class="submit-button">Submit</button>
-    
         </div>
-
     </div>
  
     <script>
         document.getElementById('registerForm').addEventListener('submit', async function(event) {
-            event.preventDefault(); // prevenim trimiterea formularului tradițional
+            event.preventDefault();
 
             const first_name = document.getElementById('fname').value;
             const last_name = document.getElementById('lname').value;
             const email = document.getElementById('email').value;
-            const reg_numeber = document.getElementById('regNumber').value;
+            const reg_number = document.getElementById('regNumber').value;
             const password = document.getElementById('password').value;
 
             try {
