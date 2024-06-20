@@ -530,6 +530,27 @@ h2
 .chart-container{
   display: flex;
   flex-direction: column;
-  margin-top: 30px;
-  gap: 20px;
+  align-items: center;
+  align-content: center;
 }
+
+.chart{
+  height: 40%;
+  width: 40%;
+  margin-top: 50px;
+  align-self: center;
+}
+
+.chart2{
+  height: 60%;
+  width: 60%;
+  margin-top: 50px;
+  align-self: center;
+  align-items: center;
+
+  .label{
+    color: white;
+    font-weight: bold;
+  }
+}
+

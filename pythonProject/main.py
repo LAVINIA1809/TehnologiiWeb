@@ -64,11 +64,21 @@ def get_general_targets():
     return data
 
 
+def get_countries_after_reg(regName):
+    cur = conn.cursor()
+    cur.callproc("get_countries_after_reg", [regName])
+    ref_cursor_name = cur.fetchone()[0]
+    ref_cursor = conn.cursor(ref_cursor_name)
+    data = ref_cursor.fetchall()
+    return data
+
+
 def get_pie_chart():
     # attack_counts_by_region = get_regions_by_attack_count()
     # attack_counts_by_region = get_general_countries()
-    attack_counts_by_region = get_general_provstates()
+    # attack_counts_by_region = get_general_provstates()
     #attack_counts_by_region = get_general_cities()
+    attack_counts_by_region = get_countries_after_reg('North America')
 
     regions = [result[0] for result in attack_counts_by_region]
     attack_counts = [result[1] for result in attack_counts_by_region]

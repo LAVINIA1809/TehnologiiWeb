@@ -20,8 +20,8 @@
     </header>
 
     <div class="content help-content">
-        <h1 class="title title-1"> Result </h1>
-        <h2 class="tile">13 November 2015</h2>   
+        <h1 class="title title-1" id="regionTitle"></h1>
+        <h2 class="tile" id="regionDate"></h2>   
         <ul>
             <li class="text"> 
                 Date and Location of the Attack: 
@@ -78,7 +78,10 @@
             </li>
         </ul>
         <p>
-            <img src="imagini/chart1.png" alt="number of victims in Paris" name="number of victims in Paris" class="imag">
+            <div class="chart">
+                <h3>Attacks in every region</h3>
+                <canvas id="canvas1" ></canvas>
+            </div>
         </p>
         <img src="imagini/chart2.png" alt="number of victims in Paris" name="number of victims in Paris" class="imag">
         <div class="set">
@@ -100,5 +103,8 @@
             Explore terrorism events throughout history </button>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="results.js"></script>
+    <script src="charts.js"></script>
 </body>
 </html>
