@@ -1,5 +1,5 @@
 <?php
-header('Content-Type: application/json');
+// header('Content-Type: application/json');
 
 $host = 'localhost';
 $db = 'glot';
@@ -7,7 +7,12 @@ $user = 'postgres';
 $pass = 'student';
 $port = '5432';
 
-$reg_name = $_GET['reg_name'];
+$reg_name = $_GET['reg_name'] ?? '';
+
+if (empty($reg_name)) {
+    echo json_encode(['error' => 'Region name is required']);
+    exit;
+}
 
 $conn = pg_connect("host=$host dbname=$db user=$user password=$pass port=$port");
 
@@ -26,7 +31,10 @@ if (!$result) {
 
 $data = pg_fetch_all($result);
 
-echo json_encode($data);
+if (is_array($data)) {
+    echo json_encode($data);
+} else {
+    echo json_encode([]);
+}
 
 pg_close($conn);
-?>

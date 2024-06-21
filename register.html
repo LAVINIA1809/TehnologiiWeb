@@ -14,8 +14,8 @@
         <div class="menu">
             <a class="option" href="homeLogged.html"> HOME </a>
             <a class="option" href="addEvent.html"> ADD EVENT </a>
-            <a class="option" href="admin.html"> ADMIN </a>
             <a class="option current-page" href="register.html"> REGISTER </a>
+            <a class="option" id="accountInfo" href="admin.html"></a>
         </div>
     </header>
      
@@ -49,9 +49,19 @@
                     <input class="input" type="password" id="password" name="password" required>
                 </div>
                 <button type="submit" class="submit-button">Submit</button>
+                <div id="error-message"></div>
             </form>
         </div>
     </div>
+
+    <script>
+        const firstName = localStorage.getItem('userFirstName');
+        const lastName = localStorage.getItem('userLastName');
+
+        const accountInfoDiv = document.getElementById('accountInfo');
+        accountInfoDiv.style.whiteSpace = 'pre-line';
+        accountInfoDiv.textContent = `ACCOUNT:\n${firstName} ${lastName}`;
+    </script>
  
     <script>
         document.getElementById('registerForm').addEventListener('submit', async function(event) {
@@ -77,7 +87,10 @@
                     console.log('Register successful. A new account has been created', data);
                     window.location.href = 'successRegister.html';
                 } else {
-                    console.error('Register failed', response.statusText);
+                    const errorMessage = document.getElementById('error-message');
+                    const errorData = await response.json();
+                    errorMessage.textContent = 'Register failed: ' + errorData.message;
+                    errorMessage.style.display = 'block';
                 }
             } catch (error) {
                 console.error('Eroare:', error);

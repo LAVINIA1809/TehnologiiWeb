@@ -1,8 +1,8 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import json
 from bson.json_util import dumps
-import re
 import psycopg2
+import bcrypt
 
 
 conn = psycopg2.connect(
@@ -26,12 +26,9 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         self._set_cors_headers()
         self.end_headers()
 
-
-
     def do_GET(self):
           pass
 
-#formularele o sa fie de tip POST
     def do_POST(self):
         if self.path == "/login":
             content_length = int(self.headers['Content-Length'])
@@ -41,30 +38,55 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             email = data.get('email')
             password = data.get('password')
 
-            query = "SELECT id FROM users WHERE email = %s AND password = %s"
-            cur.execute(query, (email, password))
+            #first_query = "SELECT firstname, lastname FROM users "
+
+            query = "SELECT password, firstname, lastname FROM users WHERE email = %s"
+            cur.execute(query, (email,))
             user = cur.fetchone()
                     
             if user:
-                response = {
-                    'message': 'Login successful!',
-                    'status': 'success'
+                stored_hash, first_name, last_name = user
+                stored_hash = stored_hash.encode('utf-8')
+
+                if email == 'admin@gmail.com':
+                    response = {
+                        'message': 'Login successful!',
+                        'status': 'success',
+                        'user': {
+                            'first_name': first_name,
+                            'last_name': last_name
+                        }
                 }
-            else:
-                self.send_response(401)
-                self._set_cors_headers()
-                self.send_header('Content-Type', 'application/json')
-                self.end_headers()
-                        
-                response = {
-                    'message': 'Invalid email or password',
-                    'status': 'fail'
+                    self.send_response(200)
+
+                else:
+
+                    if bcrypt.checkpw(password.encode('utf-8'), stored_hash):
+                        response = {
+                            'message': 'Login successful!',
+                            'status': 'success',
+                            'user': {
+                                'first_name': first_name,
+                                'last_name': last_name
+                            }
                     }
-            self.send_response(200)
+                        self.send_response(200)
+                    else:
+                        response = {
+                            'message': 'The password is incorect!',
+                            'status': 'fail'
+                        }
+                        self.send_response(401)
+            else: 
+                response = {
+                        'message': 'This email is not registred!',
+                        'status': 'fail'
+                    }
+                self.send_response(401)
+
             self._set_cors_headers()
             self.send_header('Content-Type', 'application/json')
             self.end_headers()
-                    
             self.wfile.write(json.dumps(response).encode('utf-8'))
 
         elif self.path == "/register":
@@ -79,8 +101,10 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             password = data.get('password')
 
             try:
+                salt = bcrypt.gensalt()
+                hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
                 query = "INSERT INTO users (firstname, lastname, email, regnum, password) VALUES (%s, %s, %s, %s, %s)"
-                cur.execute(query, (first_name, last_name, email, reg_number, password))
+                cur.execute(query, (first_name, last_name, email, reg_number, hashed_password.decode('utf-8')))
                 conn.commit()
 
                 response = {
@@ -138,9 +162,9 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                 cur.execute(query_city, (city, state_id, country_id, latitude, longitude))
                 city_id = cur.fetchone()[0]
 
-                # query_attack_type = "INSERT INTO attack (name) VALUES (%s) RETURNING id"
-                # cur.execute(query_attack_type, (attack_type,))
-                # attack_type_id = cur.fetchone()[0]
+                query_attack_type = "INSERT INTO attack (name) VALUES (%s) RETURNING id"
+                cur.execute(query_attack_type, (attack_type,))
+                attack_type_id = cur.fetchone()[0]
 
                 query_target_type = "INSERT INTO target (name) VALUES (%s) RETURNING id"
                 cur.execute(query_target_type, (target,))
@@ -151,11 +175,10 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                 subtarget_type_id = cur.fetchone()[0]
 
                 query_event = """
-                INSERT INTO events (date, city_id, summary, attack_type, target_type, subtarget_type, corp, spec_target, criminal, motive)
-                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                INSERT INTO events (date, city_id, summary, attack_type, corp, spec_target, criminal, motive)
+                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
                     """
-                cur.execute(query_event, (date, city_id, summary, attack_type,
-                          target, subtarget, corp,
+                cur.execute(query_event, (date, city_id, summary, attack_type_id, corp,
                           spec_target, criminal, motive))
                 conn.commit()
 

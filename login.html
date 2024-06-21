@@ -35,6 +35,7 @@
                 </div>
 
                 <button type="submit" class="submit-button">Login</button>
+                <div id="error-message"></div>
             </form>
         </div>
     </div>
@@ -58,9 +59,16 @@
                 if (response.ok) {
                     const data = await response.json();
                     console.log('Login successful', data);
+
+                    localStorage.setItem('userFirstName', data.user.first_name);
+                    localStorage.setItem('userLastName', data.user.last_name);
+
                     window.location.href = 'successLogin.html';
                 } else {
-                    console.log('Login failed', response.statusText);
+                    const errorMessage = document.getElementById('error-message');
+                    const errorData = await response.json();
+                    errorMessage.textContent = 'Login failed: ' + errorData.message;
+                    errorMessage.style.display = 'block';
                 }
             } catch (error) {
                 console.error('Eroare:', error);

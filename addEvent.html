@@ -14,8 +14,8 @@
         <div class="menu">
             <a class="option" href="homeLogged.html"> HOME </a>
             <a class="option current-page" href="addEvent.html"> ADD EVENT </a>
-            <a class="option" href="admin.html"> ADMIN </a>
             <a class="option" href="register.html"> REGISTER </a>
+            <a class="option" id="accountInfo" href="admin.html"></a>
         </div>
     </header>
      
@@ -104,6 +104,15 @@
             </form>
         </div>
     </div>
+
+    <script>
+        const firstName = localStorage.getItem('userFirstName');
+        const lastName = localStorage.getItem('userLastName');
+
+        const accountInfoDiv = document.getElementById('accountInfo');
+        accountInfoDiv.style.whiteSpace = 'pre-line';
+        accountInfoDiv.textContent = `ACCOUNT:\n${firstName} ${lastName}`;
+    </script>
  
     <script>
         document.getElementById('addEvent').addEventListener('submit', async function(event) {

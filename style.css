@@ -554,3 +554,16 @@ h2
   }
 }
 
+#error-message
+{
+  color: red;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+#accountInfo {
+  position: absolute;
+  top: -9px;
+  right: -9px;
+}
+

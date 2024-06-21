@@ -12,10 +12,10 @@
     
     <header>
         <div class="menu">
-            <a class="option" href="homeLogged.html"> HOME </a>
+            <a class="option current-page" href="homeLogged.html"> HOME </a>
             <a class="option" href="addEvent.html"> ADD EVENT </a>
-            <a class="option current-page" href="admin.html"> ADMIN </a>
             <a class="option" href="register.html"> REGISTER </a>
+            <a class="option" id="accountInfo" href="admin.html"></a>
         </div>
     </header>
 
@@ -26,6 +26,15 @@
         </p>
         <button type="submit" class="submit-button" onclick="window.location.href='index.html'">Logout</button>
     </div>
+
+    <script>
+        const firstName = localStorage.getItem('userFirstName');
+        const lastName = localStorage.getItem('userLastName');
+
+        const accountInfoDiv = document.getElementById('accountInfo');
+        accountInfoDiv.style.whiteSpace = 'pre-line';
+        accountInfoDiv.textContent = `ACCOUNT:\n${firstName} ${lastName}`;
+    </script>
 
 </body>
 
