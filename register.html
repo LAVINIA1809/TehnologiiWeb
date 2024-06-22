@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Global Terrorism </title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+
+    <header>
+        <div class="menu">
+            <a class="option" href="homeLogged.html"> HOME </a>
+            <a class="option" href="addEvent.html"> ADD EVENT </a>
+            <a class="option current-page" href="register.html"> REGISTER </a>
+            <a class="option" id="accountInfo" href="admin.html"></a>
+        </div>
+    </header>
+     
+    <div class="content">
+        <h1 class="title"> Register a new administrator account </h1>
+            
+        <div class="cont">
+            <form class="form" id="registerForm">
+                <div class="group">
+                    <label for="name" class="lable">First Name:</label>
+                    <input class="input" type="name" id="fname" name="first name" required>                    
+                </div>
+
+                <div class="group">
+                    <label for="name" class="lable">Last Name:</label>
+                    <input class="input" type="name" id="lname" name="last name" required>                    
+                </div>
+
+                <div class="group">
+                    <label for="email" class="lable">E-mail address:</label>
+                    <input class="input" type="email" id="email" name="email" required>                    
+                </div>
+            
+                <div class="group">
+                    <label for="registraiton number" class="lable">Registration Number:</label>
+                    <input class="input" type="registration number" id="regNumber" name="registration number" required>                    
+                </div>
+
+                <div class="group">
+                    <label for="password" class="lable">Password:</label>
+                    <input class="input" type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="submit-button">Submit</button>
+                <div id="error-message"></div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const firstName = localStorage.getItem('userFirstName');
+        const lastName = localStorage.getItem('userLastName');
+
+        const accountInfoDiv = document.getElementById('accountInfo');
+        accountInfoDiv.style.whiteSpace = 'pre-line';
+        accountInfoDiv.textContent = `ACCOUNT:\n${firstName} ${lastName}`;
+    </script>
+ 
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const first_name = document.getElementById('fname').value;
+            const last_name = document.getElementById('lname').value;
+            const email = document.getElementById('email').value;
+            const reg_number = document.getElementById('regNumber').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('http://localhost:8000/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ first_name, last_name, email, reg_number, password })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Register successful. A new account has been created', data);
+                    window.location.href = 'successRegister.html';
+                } else {
+                    const errorMessage = document.getElementById('error-message');
+                    const errorData = await response.json();
+                    errorMessage.textContent = 'Register failed: ' + errorData.message;
+                    errorMessage.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Eroare:', error);
+            }
+        });
+    </script>
+
+ </body>
+
+</html>

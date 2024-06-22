@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Global Terrorism </title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+    
+    <header>
+        <div class="menu">
+            <a class="option" href="index.html"> HOME </a>
+            <a class="option" href="about.html"> ABOUT </a>
+            <a class="option" href="help.html"> HELP </a>
+            <a class="option" href="login.html"> LOGIN </a>
+        </div>
+    </header>
+
+    <div class="content help-content">
+        <h1 class="title title-1" id="regionTitle"></h1>
+        <h2 class="tile" id="regionDate"></h2>   
+        <ul>
+            <li class="text"> 
+                Date and Location of the Attack: 
+                The attack occurred on the evening of Friday, November 13, 2015, in multiple locations across Paris, France. 
+                Among the targeted places were the terrace of a restaurant, the Bataclan concert hall, and the Stade de France.
+            </li>
+            <li class="text">
+                Execution of the Attack:
+                The attacks were coordinated and carried out by multiple terrorists. They opened fire in the aforementioned public 
+                places and detonated explosive devices. In total, there were multiple simultaneous attacks.
+            </li>
+            <li class="text">
+                Casualty Count:
+                The Paris terrorist attack resulted in the deaths of over 130 people and the injury of hundreds more. 
+                The victims included both French citizens and foreign nationals who were in the city at the time.
+            </li>
+            <li class="text">
+                International Response:
+                The Paris terrorist attack elicited strong condemnation from the international community. Numerous countries and leaders 
+                from around the world expressed solidarity and support for France in the aftermath of this tragic event.
+            </li>
+            <li class="text">
+                Investigation and Accountability:
+                French authorities conducted a comprehensive investigation to identify and apprehend those responsible for the attack. 
+                The terrorist group Islamic State (ISIS) claimed responsibility for the Paris attack.
+            </li>
+        </ul>
+        <h2 class="tile">13 November 2016</h2>   
+        <ul>
+            <li class="text"> 
+                Date and Location of the Attack: 
+                The attack occurred on the evening of Friday, November 13, 2016, in multiple locations across Paris, France. 
+                Among the targeted places were the terrace of a restaurant, the Bataclan concert hall, and the Stade de France.
+            </li>
+            <li class="text">
+                Execution of the Attack:
+                The attacks were coordinated and carried out by multiple terrorists. They opened fire in the aforementioned public 
+                places and detonated explosive devices. In total, there were multiple simultaneous attacks.
+            </li>
+            <li class="text">
+                Casualty Count:
+                The Paris terrorist attack resulted in the deaths of over 130 people and the injury of hundreds more. 
+                The victims included both French citizens and foreign nationals who were in the city at the time.
+            </li>
+            <li class="text">
+                International Response:
+                The Paris terrorist attack elicited strong condemnation from the international community. Numerous countries and leaders 
+                from around the world expressed solidarity and support for France in the aftermath of this tragic event.
+            </li>
+            <li class="text">
+                Investigation and Accountability:
+                French authorities conducted a comprehensive investigation to identify and apprehend those responsible for the attack. 
+                The terrorist group Islamic State (ISIS) claimed responsibility for the Paris attack.
+            </li>
+        </ul>
+        <p>
+            <div class="chart">
+                <h3>Attacks in every region</h3>
+                <canvas id="canvas1" ></canvas>
+            </div>
+        </p>
+        <img src="imagini/chart2.png" alt="number of victims in Paris" name="number of victims in Paris" class="imag">
+        <div class="set">
+            <form class="form">
+                <div class="group">
+                    <label name="File" class="lable">File type:</label>
+                    <select name="File" class="input input-select" required>
+                        <option class="select-option" value="CSV">CSV</option>
+                        <option class="select-option" value="JSON">JSON</option>
+                    </select>                    
+                </div>
+            </form>
+            <button class="button">Download</button>
+        </div>
+        <p class="text">
+            If you want to explore other periods of time or locations you can go to:
+        </p>
+        <button class="button" onclick="window.location.href='explore.html'">
+            Explore terrorism events throughout history </button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="results.js"></script>
+    <script src="charts.js"></script>
+</body>
+</html>

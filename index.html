@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Global Terrorism </title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+
+    <header>
+        <div class="menu">
+            <a class="option  current-page" href="index.html"> HOME </a>
+            <a class="option" href="about.html"> ABOUT </a>
+            <a class="option" href="help.html"> HELP </a>
+            <a class="option" href="login.html"> LOGIN </a>
+        </div>
+    </header>
+
+    <div class="content home-content">
+        <h1 class="title"> GLOBAL TERRORISM </h1>
+        <button class="button" onclick="window.location.href='explore.html'">
+            Explore terrorism events throughout history </button>
+
+            <div class="chart-container">
+                
+                    <div class="chart">
+                        <h3>Attacks in every region</h3>
+                        <canvas id="canvas1" ></canvas>
+                    </div>
+                    <div class="chart">
+                        <h3>Atacks in evry country</h3>
+                        <canvas id="canvas2" ></canvas>
+                    </div>
+                
+               
+                    <div class="chart">
+                        <h3>Attacs in every province/state</h3>
+                        <canvas id="canvas3" ></canvas>
+                    </div>
+                    <div class="chart">
+                        <h3>Attacks in every city</h3>
+                        <canvas id="canvas4" ></canvas>
+                    </div>
+              
+                
+                    <div class="chart2">
+                        <h3>Type of attacks</h3>
+                        <canvas id="canvas5" ></canvas>
+                    </div>
+                    <div class="chart2">
+                        <h3>Attacks on target type</h3>
+                        <canvas id="canvas6" ></canvas>
+                    </div>
+                
+            </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="data.js"></script>
+    <script src="charts.js"></script>
+
+    </body>
+</html>
