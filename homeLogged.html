@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> Global Terrorism </title>
     <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
 
 <body>
@@ -21,31 +22,34 @@
 
     <div class="content home-content">
         <h1 class="title"> GLOBAL TERRORISM </h1>
-        <button class="button" onclick="window.location.href='exploreLogged.html'">
-            Explore terrorism events throughout history </button>
+        
+
+        <div class="text-content">
+            <p class="text">Welcome to our website dedicated to understanding global terrorism trends. 
+                Here, we provide insightful visualizations and analyses of terrorist attacks from around the world. 
+                Our goal is to shed light on these complex events, their patterns, and their impact on regions, 
+                countries, and communities worldwide.</p>
+    
+            <p class="text">Through interactive maps, charts, and data-driven insights, we aim to uncover the frequency and 
+                distribution of terrorist incidents over time. Dive into our visual representations to explore:</p>
+        </div>
 
             <div class="chart-container">
                 
                     <div class="chart">
                         <h3>Attacks in every region</h3>
-                        <canvas id="canvas1" ></canvas>
+                        <div id="map1"></div>
                     </div>
                     <div class="chart">
                         <h3>Atacks in evry country</h3>
-                        <canvas id="canvas2" ></canvas>
-                    </div>
-                
-               
-                    <div class="chart">
-                        <h3>Attacs in every province/state</h3>
-                        <canvas id="canvas3" ></canvas>
-                    </div>
-                    <div class="chart">
-                        <h3>Attacks in every city</h3>
-                        <canvas id="canvas4" ></canvas>
+                        <div id="map2"></div>
                     </div>
               
                 
+                    <div class="chart2">
+                        <h3>Attacks every year</h3>
+                        <canvas id="canvas7" ></canvas>
+                    </div>
                     <div class="chart2">
                         <h3>Type of attacks</h3>
                         <canvas id="canvas5" ></canvas>
@@ -56,6 +60,9 @@
                     </div>
                 
             </div>
+
+            <button class="button" onclick="window.location.href='explore.html'">
+                Explore terrorism events throughout history </button>
     </div>
 
     <script>
@@ -66,6 +73,10 @@
         accountInfoDiv.style.whiteSpace = 'pre-line';
         accountInfoDiv.textContent = `ACCOUNT:\n${firstName} ${lastName}`;
     </script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-ajax/dist/leaflet.ajax.min.js"></script>
+    <script src="reg_maps.js"></script>
+    <script src="country_maps.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="data.js"></script>
     <script src="charts.js"></script>

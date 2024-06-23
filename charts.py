@@ -62,6 +62,15 @@ def get_general_targets():
     data = ref_cursor.fetchall()
     return data
 
+def get_count_attacks_by_year():
+    cur = conn.cursor()
+    cur.callproc("count_attacks_by_year", [])
+    ref_cursor_name = cur.fetchone()[0]
+    ref_cursor = conn.cursor(ref_cursor_name)
+    data = ref_cursor.fetchall()
+    converted_data = [(int(row[0]), int(row[1])) for row in data]
+    return converted_data
+
 
 def export_data(data, filename):
     with open(filename, 'w') as file:
@@ -73,5 +82,6 @@ export_data(get_general_provstates(), 'data3.json')
 export_data(get_general_cities(), 'data4.json')
 export_data(get_general_attacks(), 'data5.json')
 export_data(get_general_targets(), 'data6.json')
+export_data(get_count_attacks_by_year(), 'data7.json')
 
 conn.close()

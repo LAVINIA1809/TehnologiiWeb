@@ -2,15 +2,14 @@
 fetch('data1.json')
     .then(response => response.json())
     .then(data => {
-        
-        createPieChart(data, 'Attacks in every region', 'canvas1');
+        makeRegMap(data, "maps/map.geojson");
     });
 
 fetch('data2.json')
     .then(response => response.json())
     .then(data => {
         
-        createPieChart(data, 'Atacks in evry country', 'canvas2');
+        makeCountrysMap(data, "maps/world-outline-low-precision_759.geojson");
     });
 
 fetch('data3.json')
@@ -39,6 +38,13 @@ fetch('data6.json')
     .then(data => {
         
         createBarChart(data, 'Attacks on target type', 'canvas6');
+    });
+
+fetch('data7.json')
+    .then(response => response.json())
+    .then(data => {
+        
+        createBarChart(data, 'Attacks every year', 'canvas7');
     });
 
 
