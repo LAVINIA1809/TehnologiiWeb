@@ -46,9 +46,9 @@
 
     function style(feature) {
         const regionName = feature.properties.name;
-        console.log("region name: ", regionName);
+        //console.log("region name: ", regionName);
         const attackCount = attackData2[regionName];
-        console.log("attackCount: ", attackCount);
+        //console.log("attackCount: ", attackCount);
         return {
             fillColor: getColor(attackCount),
             weight: 0.5,
@@ -70,7 +70,7 @@
 
     window.makeCountrysMap = function(data, mapLink) {
         attackData2 = preprocessData(data);
-        console.log("data: ", attackData2);
+        //console.log("data: ", attackData2);
 
     var geojsonLayer = new L.GeoJSON.AJAX(mapLink, {
         style: style,

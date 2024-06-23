@@ -1,40 +1,73 @@
-function getParameterByName(name, url) {
-    if (!url) url = window.location.href;
-    name = name.replace(/[\[\]]/g, '\\$&');
-    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, ' '));
-}
-
-function formatDate(dateString) {
-    const months = ["Ianuarie", "Februarie", "Martie", "Aprilie", "Mai", "Iunie", "Iulie", "August", "Septembrie", "Octombrie", "Noiembrie", "Decembrie"];
-    const parts = dateString.split("-");
-    const day = parseInt(parts[2], 10);
-    const month = parseInt(parts[1], 10);
-    const year = parseInt(parts[0], 10);
-    return day + " " + months[month - 1] + " " + year;
-}
-
-const fetchChartData = async (regName, canvasId, chartType, chartTitle) => {
+async function getResults(event) {
     try {
-        const response = await fetch(`get_reults.php?reg_name=${regName}`);
-        const data = await response.json();
+        const urlParams = new URLSearchParams(window.location.search);
+        const entityType = urlParams.get('type');
+        let entityName = urlParams.get('name');
 
-        if (chartType === 'pie') {
-            createPieChart(data, chartTitle, canvasId);
-        } else if (chartType === 'bar') {
-            createBarChart(data, chartTitle, canvasId);
+        if (entityType && entityName) {
+
+            switch (entityType) {
+                case 'region':
+                    document.getElementById('pageTitle').innerText = `Results for region: ${entityName}`;
+                    
+                    try {
+                        const response = await fetch(`http://localhost:8000/result?type=${entityType}&name=${entityName}`, {
+                            method: 'GET'
+                        });
+            
+                        if (!response.ok) {
+                            console.error('Response not ok:', response.status);
+                            return;
+                        }
+            
+                        const data1 = await response.json();
+                        console.log('Get successful', data1);
+
+                        entityName = entityName.replace(/\s+/g, '');
+                        const mapLink = `maps/${entityName}.geojson`;
+            
+                        // Așteaptă ca toate datele să fie procesate înainte de a continua
+                        await Promise.all([
+                            fetch('data2.json')
+                            .then(response => response.json())
+                            .then(data => {
+                                
+                                makeCountrysMap(data, "maps/world-outline-low-precision_759.geojson");
+                            }),
+                            fetch('data5.json')
+                                .then(response => response.json())
+                                .then(data => createBarChart(data, 'Type of attacks', 'canvas5')),
+                            fetch('data6.json')
+                                .then(response => response.json())
+                                .then(data => createBarChart(data, 'Attacks on target type', 'canvas6')),
+                            fetch('data7.json')
+                                .then(response => response.json())
+                                .then(data => createBarChart(data, 'Attacks every year', 'canvas7'))
+                        ]);
+            
+                    } catch (error) {
+                        console.error('Fetch error:', error);
+                    }
+                    break;
+                case 'country':
+                    document.getElementById('pageTitle').innerText = `Results for country: ${entityName}`;
+                    break;
+                default:
+                    console.error('Invalid entity type:', entityType);
+                    break;
+            }
+            
+
+        } else {
+            console.error('Invalid or missing parameters in URL');
         }
+
     } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Fetch error:', error);
     }
-};
+}
 
-var region = getParameterByName('region');
-
-document.getElementById('regionTitle').innerText = region;
-
-fetchChartData(region, 'canvas1', 'pie', 'Attacks in every region');
-
+document.addEventListener('DOMContentLoaded', (event) => {
+    event.preventDefault();
+    getResults();
+});

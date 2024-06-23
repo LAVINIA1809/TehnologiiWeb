@@ -1,6 +1,7 @@
 var map = L.map('map1').setView([0, 0], 2);
 var colors = ['#FFEDA0', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026'];
 var thresholds = [0, 500, 1000, 5000, 10000, 20000, 50000];
+var clickedRegion = null;
 
 function createLegend() {
     var legend = L.control({ position: 'bottomleft' });
@@ -64,12 +65,14 @@ function style(feature) {
 function onEachFeature(feature, layer) {
     layer.on({
         click: function(e) {
-            window.location.href = `result.html?region=${feature.properties.region}`;
+            const entityType = "region";
+            const entityName = feature.properties.name;
+            
+            window.location.href = `result.html?type=${entityType}&name=${entityName}`;
         }
     });
     layer.bindPopup(feature.properties.region + ": " + (attackData[feature.properties.region] || 0) + " atacuri");
 }
-
 
 function makeRegMap(data, mapLink) {
     

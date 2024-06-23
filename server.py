@@ -1,9 +1,11 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import json
-#from bson.json_util import dumps
+# from bson.json_util import dumps
 import psycopg2
 import bcrypt
-
+from urllib.parse import urlparse, parse_qs
+import charts
+import urllib
 
 conn = psycopg2.connect(
     dbname="glot",
@@ -12,7 +14,6 @@ conn = psycopg2.connect(
     host="localhost",
     port="5432")
 cur = conn.cursor()
-                    
 
 
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
@@ -27,7 +28,55 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         self.end_headers()
 
     def do_GET(self):
-          pass
+        parsed_path = urlparse(self.path)
+        print(self.path)
+
+        if parsed_path.path == "/home":
+            charts.get_regions_by_attack_count(cur, conn)
+            charts.get_general_countries(cur, conn)
+            charts.get_general_attacks(cur, conn)
+            charts.get_general_targets(cur, conn)
+            charts.get_count_attacks_by_year(cur,conn)
+
+            self.send_response(200)
+            self._set_cors_headers()
+            self.end_headers()
+            self.wfile.write(b'ok')
+
+        if self.path.startswith('/result'):
+            print("sunt in api")
+            query_params = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
+
+            if 'type' in query_params and 'name' in query_params:
+                entity_type = query_params['type'][0]
+                entity_name = query_params['name'][0]
+
+                if entity_type == 'region':
+                    charts.get_coutries_in_reg(cur, conn, entity_name)
+                    charts.get_attacks_in_reg(cur, conn, entity_name)
+                    charts.get_targets_in_regg(cur, conn, entity_name)
+                    charts.get_attacks_by_year_in_reg(cur, conn, entity_name)
+
+                    response = {'message': 'OK',
+                                'status': 'success', }
+
+                    self.send_response(200)
+                    self._set_cors_headers()
+                    self.send_header('Content-Type', 'application/json')
+                    self.end_headers()
+                    self.wfile.write(json.dumps(response).encode('utf-8'))
+
+            else:
+                # Dacă lipsește parametrul necesar "name", returnăm un cod de eroare 400 (Bad Request)
+                self.send_response(400)
+                self._set_cors_headers()
+                self.end_headers()
+                self.wfile.write(b'Missing required parameter "name"')
+        else:
+            # Dacă ruta nu corespunde, returnăm un cod de eroare 404 (Not Found)
+            self.send_response(404)
+            self.end_headers()
+            self.wfile.write(b'Not Found')
 
     def do_POST(self):
         if self.path == "/login":
@@ -38,12 +87,12 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             email = data.get('email')
             password = data.get('password')
 
-            #first_query = "SELECT firstname, lastname FROM users "
+            # first_query = "SELECT firstname, lastname FROM users "
 
             query = "SELECT password, firstname, lastname FROM users WHERE email = %s"
             cur.execute(query, (email,))
             user = cur.fetchone()
-                    
+
             if user:
                 stored_hash, first_name, last_name = user
                 stored_hash = stored_hash.encode('utf-8')
@@ -56,7 +105,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                             'first_name': first_name,
                             'last_name': last_name
                         }
-                }
+                    }
                     self.send_response(200)
 
                 else:
@@ -69,7 +118,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                                 'first_name': first_name,
                                 'last_name': last_name
                             }
-                    }
+                        }
                         self.send_response(200)
                     else:
                         response = {
@@ -77,11 +126,11 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                             'status': 'fail'
                         }
                         self.send_response(401)
-            else: 
+            else:
                 response = {
-                        'message': 'This email is not registred!',
-                        'status': 'fail'
-                    }
+                    'message': 'This email is not registred!',
+                    'status': 'fail'
+                }
                 self.send_response(401)
 
             self._set_cors_headers()
@@ -123,7 +172,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                 self.send_header('Content-Type', 'application/json')
                 self.end_headers()
                 self.wfile.write(json.dumps(response).encode('utf-8'))
-            
+
         elif self.path == "/addEvent":
             content_length = int(self.headers['Content-Length'])
             post_data = self.rfile.read(content_length)
@@ -179,7 +228,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                         VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
                     """
                 cur.execute(query_event, (date, city_id, summary, attack_type_id, corp,
-                          spec_target, criminal, motive))
+                                          spec_target, criminal, motive))
                 conn.commit()
 
                 response = {

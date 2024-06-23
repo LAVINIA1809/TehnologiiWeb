@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> Global Terrorism </title>
     <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
 
 <body>
@@ -20,70 +21,27 @@
     </header>
 
     <div class="content help-content">
-        <h1 class="title title-1" id="regionTitle"></h1>
-        <h2 class="tile" id="regionDate"></h2>   
-        <ul>
-            <li class="text"> 
-                Date and Location of the Attack: 
-                The attack occurred on the evening of Friday, November 13, 2015, in multiple locations across Paris, France. 
-                Among the targeted places were the terrace of a restaurant, the Bataclan concert hall, and the Stade de France.
-            </li>
-            <li class="text">
-                Execution of the Attack:
-                The attacks were coordinated and carried out by multiple terrorists. They opened fire in the aforementioned public 
-                places and detonated explosive devices. In total, there were multiple simultaneous attacks.
-            </li>
-            <li class="text">
-                Casualty Count:
-                The Paris terrorist attack resulted in the deaths of over 130 people and the injury of hundreds more. 
-                The victims included both French citizens and foreign nationals who were in the city at the time.
-            </li>
-            <li class="text">
-                International Response:
-                The Paris terrorist attack elicited strong condemnation from the international community. Numerous countries and leaders 
-                from around the world expressed solidarity and support for France in the aftermath of this tragic event.
-            </li>
-            <li class="text">
-                Investigation and Accountability:
-                French authorities conducted a comprehensive investigation to identify and apprehend those responsible for the attack. 
-                The terrorist group Islamic State (ISIS) claimed responsibility for the Paris attack.
-            </li>
-        </ul>
-        <h2 class="tile">13 November 2016</h2>   
-        <ul>
-            <li class="text"> 
-                Date and Location of the Attack: 
-                The attack occurred on the evening of Friday, November 13, 2016, in multiple locations across Paris, France. 
-                Among the targeted places were the terrace of a restaurant, the Bataclan concert hall, and the Stade de France.
-            </li>
-            <li class="text">
-                Execution of the Attack:
-                The attacks were coordinated and carried out by multiple terrorists. They opened fire in the aforementioned public 
-                places and detonated explosive devices. In total, there were multiple simultaneous attacks.
-            </li>
-            <li class="text">
-                Casualty Count:
-                The Paris terrorist attack resulted in the deaths of over 130 people and the injury of hundreds more. 
-                The victims included both French citizens and foreign nationals who were in the city at the time.
-            </li>
-            <li class="text">
-                International Response:
-                The Paris terrorist attack elicited strong condemnation from the international community. Numerous countries and leaders 
-                from around the world expressed solidarity and support for France in the aftermath of this tragic event.
-            </li>
-            <li class="text">
-                Investigation and Accountability:
-                French authorities conducted a comprehensive investigation to identify and apprehend those responsible for the attack. 
-                The terrorist group Islamic State (ISIS) claimed responsibility for the Paris attack.
-            </li>
-        </ul>
-        <p>
+        <h1 class="title title-1" id="pageTitle"></h1>
+        
+        <div class="chart-container">
             <div class="chart">
-                <h3>Attacks in every region</h3>
-                <canvas id="canvas1" ></canvas>
+                <h3>Attacks in every country</h3>
+                <div id="map2"></div>
             </div>
-        </p>
-        <img src="imagini/chart2.png" alt="number of victims in Paris" name="number of victims in Paris" class="imag">
+
+            <div class="chart2">
+                <h3>Attacks every year</h3>
+                <canvas id="canvas7" ></canvas>
+            </div>
+            <div class="chart2">
+                <h3>Type of attacks</h3>
+                <canvas id="canvas5" ></canvas>
+            </div>
+            <div class="chart2">
+                <h3>Attacks on target type</h3>
+                <canvas id="canvas6" ></canvas>
+            </div>
+        </div>
         <div class="set">
             <form class="form">
                 <div class="group">
@@ -104,7 +62,12 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-ajax/dist/leaflet.ajax.min.js"></script>
+    
+    
     <script src="results.js"></script>
+    <script src="country_maps.js"></script>
     <script src="charts.js"></script>
 </body>
 </html>
