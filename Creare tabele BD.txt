@@ -74,3 +74,16 @@ CREATE TABLE events(
     criminal VARCHAR(1000),
     motive VARCHAR(10000)
 );
+
+CREATE TABLE password_reset_tokens (
+id SERIAL PRIMARY KEY,
+email VARCHAR(100) NOT NULL CHECK (email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'),
+token VARCHAR(255) NOT NULL,
+created_at TIMESTAMP NOT NULL);
+
+CREATE TABLE verify_email (
+id SERIAL PRIMARY KEY,
+email VARCHAR(100) NOT NULL UNIQUE CHECK (email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'),
+token VARCHAR(255) NOT NULL,
+is_verified BOOLEAN NOT NULL DEFAULT FALSE,
+created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP);
