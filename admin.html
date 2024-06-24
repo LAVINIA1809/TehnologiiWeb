@@ -34,6 +34,11 @@
         const accountInfoDiv = document.getElementById('accountInfo');
         accountInfoDiv.style.whiteSpace = 'pre-line';
         accountInfoDiv.textContent = `ACCOUNT:\n${firstName} ${lastName}`;
+        const logoutButton = document.querySelector('.submit-button');
+        logoutButton.addEventListener('click', function() {
+            localStorage.removeItem('userFirstName');
+            localStorage.removeItem('userLastName');
+        });
     </script>
 
 </body>

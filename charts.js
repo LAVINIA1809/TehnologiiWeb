@@ -72,13 +72,6 @@ function createBarChart(data, title, canvasId) {
                     text: "Number of attacks"
                 }
             },         
-            onClick: function(event, elements) {
-                if (elements.length > 0) {
-                    const clickedElementIndex = elements[0]._index;
-                    const label = this.data.labels[clickedElementIndex];
-                    window.location.href = `result.html?region=${label}`;
-                }
-            }
         }
     });
 }
