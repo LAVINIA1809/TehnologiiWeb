@@ -1,0 +1,251 @@
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    firstName VARCHAR(100) NOT NULL CHECK (firstName ~ '^[A-Za-z\- ]+$'),
+    lastName VARCHAR(100) NOT NULL CHECK (lastName ~ '^[A-Za-z]+$'),
+    email VARCHAR(100) NOT NULL CHECK (email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'),
+    regNum CHAR(5) NOT NULL CHECK (regNum ~ '^[0-9]{5}$'),
+    password VARCHAR(100) NOT NULL CHECK (LENGTH(password) >= 3)
+);
+
+
+
+CREATE TABLE regions (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL
+);
+
+
+CREATE TABLE countries(
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    region_id INT,
+    FOREIGN KEY (region_id) REFERENCES regions(id)
+);
+
+CREATE TABLE provstates(
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    country_id INT,
+    FOREIGN KEY (country_id) REFERENCES countries(id)
+);
+
+CREATE TABLE cities(
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    provstate_id INT,
+    FOREIGN KEY (provstate_id) REFERENCES provstates(id),
+    country_id INT,
+    FOREIGN KEY (country_id) REFERENCES countries(id),
+    lat NUMERIC(9,6) CHECK (lat BETWEEN -90 AND 90),
+    long NUMERIC(9,6) CHECK (long BETWEEN -180 AND 180)
+);
+
+CREATE TABLE attack(
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL 
+);
+
+CREATE TABLE target(
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE subtarget(
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    target_type INT,
+    FOREIGN KEY (target_type) REFERENCES target(id)
+);
+
+CREATE TABLE events(
+    id SERIAL PRIMARY KEY,
+    date DATE NOT NULL,
+    city_id INT,
+    FOREIGN KEY (city_id) REFERENCES cities(id),
+    summary VARCHAR(10000),
+    attack_type INT,
+    FOREIGN KEY (attack_type) REFERENCES attack(id),
+    target_type INT,
+    FOREIGN KEY (target_type) REFERENCES target(id),
+    subtarget_type INT,
+    FOREIGN KEY (subtarget_type) REFERENCES subtarget(id),
+    corp VARCHAR(1000),
+    spec_target VARCHAR(1000),
+    criminal VARCHAR(1000),
+    motive VARCHAR(10000)
+);
+
+CREATE OR REPLACE FUNCTION func() RETURNS refcursor AS $$
+DECLARE
+    ref refcursor;
+BEGIN
+    OPEN ref FOR
+        SELECT r.name AS region_name, COUNT(e.id) AS attack_count
+        FROM regions r
+        JOIN countries c ON r.id = c.region_id
+        JOIN cities ci ON c.id = ci.country_id
+        JOIN events e ON ci.id = e.city_id
+        GROUP BY r.name;
+    RETURN ref;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION get_general_countries() RETURNS refcursor AS $$
+DECLARE
+    ref refcursor;
+BEGIN
+    OPEN ref FOR
+        SELECT c.name AS country_name, COUNT(e.id) AS attack_count
+        FROM
+        countries c
+        JOIN cities ci ON c.id = ci.country_id
+        JOIN events e ON ci.id = e.city_id
+        GROUP BY c.name;
+    RETURN ref;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION get_general_provstates() RETURNS refcursor AS $$
+DECLARE
+    ref refcursor;
+BEGIN
+    OPEN ref FOR
+        SELECT p.name AS provstate_name, COUNT(e.id) AS attack_count
+        FROM
+        provstates p
+        JOIN cities ci ON p.id = ci.provstate_id
+        JOIN events e ON ci.id = e.city_id
+        GROUP BY p.name;
+    RETURN ref;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE or REPLACE FUNCTION get_general_cities() RETURNS refcursor AS $$
+DECLARE
+    ref refcursor;
+BEGIN
+    OPEN ref FOR
+        SELECT ci.name AS city_name, COUNT(e.id) AS attack_count
+        from cities ci
+        JOIN events e ON ci.id = e.city_id
+        GROUP BY ci.name;
+    RETURN ref;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE or REPLACE FUNCTION get_general_attacks() RETURNS refcursor AS $$
+DECLARE
+    ref refcursor;
+BEGIN
+    OPEN ref FOR
+        SELECT a.name AS attack_type, COUNT(e.id) AS attack_count
+        from attack a
+        JOIN events e ON a.id = e.attack_type
+        GROUP BY a.name;
+    RETURN ref;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE or REPLACE FUNCTION get_general_targets() RETURNS refcursor AS $$
+DECLARE
+    ref refcursor;
+BEGIN
+    OPEN ref FOR
+        SELECT t.name AS target_type, COUNT(e.id) AS attack_count
+        from target t
+        JOIN events e ON t.id = e.target_type
+        GROUP BY t.name;
+    RETURN ref;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION count_attacks_by_year() RETURNS refcursor AS $$
+DECLARE
+    ref refcursor;
+BEGIN
+    OPEN ref FOR
+      SELECT EXTRACT(YEAR FROM date) AS year, COUNT(*) AS num_attacks
+      FROM events
+      GROUP BY EXTRACT(YEAR FROM date)
+      ORDER BY year;
+    RETURN ref;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION get_coutries_in_reg(region_name VARCHAR) RETURNS refcursor AS $$
+DECLARE
+    ref refcursor;
+BEGIN
+    OPEN ref FOR
+        SELECT c.name AS country_name, COUNT(e.id) AS attack_count
+        FROM
+        countries c
+        JOIN cities ci ON c.id = ci.country_id
+        JOIN regions r ON c.region_id = r.id
+        JOIN events e ON ci.id = e.city_id
+        WHERE r.name = region_name
+        GROUP BY c.name;
+    RETURN ref;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION get_attacks_in_reg(region_name VARCHAR) RETURNS refcursor AS $$
+DECLARE
+    ref refcursor;
+BEGIN
+    OPEN ref FOR
+        SELECT a.name AS attack_type, COUNT(e.id) AS attack_count
+        from attack a
+        JOIN events e ON a.id = e.attack_type
+        join cities ci on ci.id = e.city_id
+        join countries c ON c.id = ci.country_id
+        join regions r on r.id = c.region_id
+        WHERE r.name = region_name
+        GROUP BY a.name;
+    RETURN ref;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+CREATE OR REPLACE FUNCTION get_targets_in_reg(region_name VARCHAR) RETURNS refcursor AS $$
+DECLARE
+    ref refcursor;
+BEGIN
+    OPEN ref FOR
+        SELECT t.name AS target_type, COUNT(e.id) AS attack_count
+        from target t
+        JOIN events e ON t.id = e.target_type
+        join cities ci on ci.id = e.city_id
+        join countries c ON c.id = ci.country_id
+        join regions r on r.id = c.region_id
+        WHERE r.name = region_name
+        GROUP BY t.name;
+    RETURN ref;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION get_attacks_by_year_in_reg(region_name VARCHAR) RETURNS refcursor AS $$
+DECLARE
+    ref refcursor;
+BEGIN
+    OPEN ref FOR
+        SELECT EXTRACT(YEAR FROM date) AS year, COUNT(*) AS num_attacks
+        FROM events e
+        join cities ci on ci.id = e.city_id
+        join countries c ON c.id = ci.country_id
+        join regions r on r.id = c.region_id
+        WHERE r.name = region_name
+        GROUP BY EXTRACT(YEAR FROM date)
+        ORDER BY year;
+    RETURN ref;
+END;
+$$ LANGUAGE plpgsql;
