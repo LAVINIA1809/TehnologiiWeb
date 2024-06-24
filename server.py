@@ -58,13 +58,16 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                     charts.get_attacks_by_year_in_reg(cur, conn, entity_name)
 
                     response = {'message': 'OK',
-                                'status': 'success', }
+                                'status': 'success'}
 
                     self.send_response(200)
                     self._set_cors_headers()
                     self.send_header('Content-Type', 'application/json')
                     self.end_headers()
                     self.wfile.write(json.dumps(response).encode('utf-8'))
+                
+                else:
+                    pass
 
             else:
                 # Dacă lipsește parametrul necesar "name", returnăm un cod de eroare 400 (Bad Request)

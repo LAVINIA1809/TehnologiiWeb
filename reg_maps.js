@@ -36,13 +36,13 @@ function preprocessData(data) {
 
 function getColor(d) {
     //console.log(d);
-    return d > 50000 ? '#7F0000' :
-           d > 20000 ? '#FF0000' :
-           d > 10000 ? '#FF4500' :
-           d > 5000  ? '#FF7F50' :
-           d > 1000  ? '#FFA07A' :
-           d > 500   ? '#FFD700' :
-                       '#FFEDA0';
+    return d > 50000 ? colors[6] :
+           d > 20000 ? colors[5] :
+           d > 10000 ? colors[4] :
+           d > 5000  ? colors[3] :
+           d > 1000  ? colors[2] :
+           d > 500   ? colors[1] :
+                       colors[0];
 }
 
 
@@ -71,7 +71,7 @@ function onEachFeature(feature, layer) {
             window.location.href = `result.html?type=${entityType}&name=${entityName}`;
         }
     });
-    layer.bindPopup(feature.properties.region + ": " + (attackData[feature.properties.region] || 0) + " atacuri");
+    layer.bindPopup(feature.properties.name + ": " + (attackData[feature.properties.name] || 0) + " atacuri");
 }
 
 function makeRegMap(data, mapLink) {

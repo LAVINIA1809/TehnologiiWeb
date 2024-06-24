@@ -1,7 +1,7 @@
 (function () {
-    var map = L.map('map2').setView([0, 0], 2);
-    var colors = ['#FFEDA0', '#FED976', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026', '#4C0000', '#1A0000'];
-    var thresholds = [0, 50, 100, 500, 1000, 5000, 10000, 20000, 30000];
+    var map = L.map('map3').setView([0, 0], 2);
+    var colors = ['#FFEDA0', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026'];
+var thresholds = [0, 50, 100, 500, 1000, 5000, 10000];
 
     function createLegend() {
         var legend = L.control({ position: 'bottomleft' });
@@ -33,15 +33,13 @@
     }
 
     function getColor(d) {
-        return d > 30000 ? colors[8] :
-               d > 20000 ? colors[7] :
-               d > 10000 ? colors[6] :
-               d > 5000  ? colors[5] :
-               d > 1000  ? colors[4] :
-               d > 500   ? colors[3] :
-               d > 100   ? colors[2] :
-               d > 50    ? colors[1] :
-                           colors[0];
+        return d > 10000 ? colors[6] :
+               d > 5000 ? colors[5] :
+               d > 1000 ? colors[4] :
+               d > 500  ? colors[3] :
+               d > 100  ? colors[2] :
+               d > 50   ? colors[1] :
+                          colors[0]
     }
 
     function style(feature) {
@@ -62,10 +60,10 @@
     function onEachFeature(feature, layer) {
         layer.on({
             click: function(e) {
-                const entityType = "country";
-                const entityName = feature.properties.name;
-                
-                window.location.href = `result.html?type=${entityType}&name=${entityName}`;
+                const entityType = "state";
+            const entityName = feature.properties.name;
+            
+            window.location.href = `result.html?type=${entityType}&name=${entityName}`;
             }
         });
         layer.bindPopup(feature.properties.region + ": " + (attackData2[feature.properties.region] || 0) + " atacuri");
