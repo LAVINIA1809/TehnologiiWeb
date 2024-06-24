@@ -18,36 +18,24 @@ async function getResults() {
                              })
                              .then(response => response.json())
                              .then(data => {
-                                 console.log('Get successful', data);
-
+                                 console.log(data.data1);
+                                 makeCountrysMap(data.data1, mapLink);
+                                 console.log(data.data2);
+                                 createBarChart(data.data2, 'Type of attacks', 'canvas5')
+                                 console.log(data.data3);
+                                 createBarChart(data.data3, 'Attacks on target type', 'canvas6')
+                                 console.log(data.data4);
+                                 createBarChart(data.data4, 'Attacks every year', 'canvas7')
                              });
 
                              console.log("salut3")
                 
-                        
-
+                    
                         entityName = entityName.replace(/\s+/g, '');
                         const mapLink = `maps/${entityName}.geojson`;
 
                         console.log("salut")
 
-                        await Promise.all([
-                            console.log("sunt aici"),
-                            fetch('data2.json')
-                            .then(response => response.json())
-                            .then(data => {
-                                makeCountrysMap(data, mapLink);
-                            }),
-                            fetch('data5.json')
-                                .then(response => response.json())
-                                .then(data => createBarChart(data, 'Type of attacks', 'canvas5')),
-                            fetch('data6.json')
-                                .then(response => response.json())
-                                .then(data => createBarChart(data, 'Attacks on target type', 'canvas6')),
-                            fetch('data7.json')
-                                .then(response => response.json())
-                                .then(data => createBarChart(data, 'Attacks every year', 'canvas7'))
-                        ]);
                         console.log("am iesit de aici");
                         return;
                     } catch (error) {

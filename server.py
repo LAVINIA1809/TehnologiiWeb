@@ -4,7 +4,7 @@ import json
 import psycopg2
 import bcrypt
 from urllib.parse import urlparse, parse_qs
-import charts
+import call_plsql
 import urllib
 
 conn = psycopg2.connect(
@@ -32,18 +32,18 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         print(self.path)
 
         if parsed_path.path == "/home":
-            charts.get_regions_by_attack_count(cur, conn)
-            charts.get_general_countries(cur, conn)
-            charts.get_general_attacks(cur, conn)
-            charts.get_general_targets(cur, conn)
-            charts.get_count_attacks_by_year(cur,conn)
+            call_plsql.get_regions_by_attack_count(cur, conn)
+            call_plsql.get_general_countries(cur, conn)
+            call_plsql.get_general_attacks(cur, conn)
+            call_plsql.get_general_targets(cur, conn)
+            call_plsql.get_count_attacks_by_year(cur, conn)
 
             self.send_response(200)
             self._set_cors_headers()
             self.end_headers()
             self.wfile.write(b'ok')
 
-        if self.path.startswith('/result'):
+        elif self.path.startswith('/result'):
             print("sunt in api")
             query_params = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
 
@@ -52,22 +52,41 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                 entity_name = query_params['name'][0]
 
                 if entity_type == 'region':
-                    charts.get_coutries_in_reg(cur, conn, entity_name)
-                    charts.get_attacks_in_reg(cur, conn, entity_name)
-                    charts.get_targets_in_regg(cur, conn, entity_name)
-                    charts.get_attacks_by_year_in_reg(cur, conn, entity_name)
+                    print("region")
+
+                    data1 = call_plsql.get_coutries_in_reg(cur, conn, entity_name)
+                    data2 = call_plsql.get_attacks_in_reg(cur, conn, entity_name)
+                    data3 = call_plsql.get_targets_in_regg(cur, conn, entity_name)
+                    data4 = call_plsql.get_attacks_by_year_in_reg(cur, conn, entity_name)
+
+                    print("sunt in region1")
 
                     response = {'message': 'OK',
-                                'status': 'success'}
+                                'status': 'success',
+                                'data1': data1,
+                                'data2': data2,
+                                'data3': data3,
+                                'data4': data4}
+
+                    print("sunt in region2")
 
                     self.send_response(200)
                     self._set_cors_headers()
                     self.send_header('Content-Type', 'application/json')
                     self.end_headers()
-                    self.wfile.write(json.dumps(response).encode('utf-8'))
+                    try:
+                        self.wfile.write(json.dumps(response).encode('utf-8'))
+                    except ConnectionAbortedError as e:
+                        print(f"Error writing response: {e}")
                 
                 else:
-                    pass
+                    self.send_response(400)
+                    self._set_cors_headers()
+                    self.end_headers()
+                    try:
+                        self.wfile.write(b'Invalid entity type')
+                    except ConnectionAbortedError as e:
+                        print(f"Error writing response: {e}")
 
             else:
                 # Dacă lipsește parametrul necesar "name", returnăm un cod de eroare 400 (Bad Request)
