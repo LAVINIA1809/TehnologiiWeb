@@ -68,7 +68,7 @@ function onEachFeature(feature, layer) {
             const entityType = "region";
             const entityName = feature.properties.name;
             
-            window.location.href = `result.html?type=${entityType}&name=${entityName}`;
+            window.location.href = `reg_result.html?type=${entityType}&name=${entityName}`;
         }
     });
     layer.bindPopup(feature.properties.name + ": " + (attackData[feature.properties.name] || 0) + " atacuri");

@@ -24,9 +24,10 @@ function createPieChart(data, title, canvasId) {
             },
             onClick: function(event, elements) {
                 if (elements.length > 0) {
+                    const entityType = "city";
                     const clickedElementIndex = elements[0].index;
                     const label = this.data.labels[clickedElementIndex];
-                    window.location.href = `result.html?region=${label}`;
+                    window.location.href = `city_result.html?type=${entityType}&name=${label}`;
                 }
             }
         }

@@ -65,29 +65,29 @@
                 const entityType = "country";
                 const entityName = feature.properties.name;
                 
-                window.location.href = `result.html?type=${entityType}&name=${entityName}`;
+                window.location.href = `country_result.html?type=${entityType}&name=${entityName}`;
             }
         });
-        layer.bindPopup(feature.properties.region + ": " + (attackData2[feature.properties.region] || 0) + " atacuri");
+        layer.bindPopup(feature.properties.name + ": " + (attackData2[feature.properties.name] || 0) + " atacuri");
     }
 
     window.makeCountrysMap = function(data, mapLink) {
         attackData2 = preprocessData(data);
         //console.log("data: ", attackData2);
 
-    var geojsonLayer = new L.GeoJSON.AJAX(mapLink, {
-        style: style,
-        onEachFeature: onEachFeature
-    });
+        var geojsonLayer = new L.GeoJSON.AJAX(mapLink, {
+            style: style,
+            onEachFeature: onEachFeature
+        });
 
-    geojsonLayer.on('data:loaded', function() {
-        geojsonLayer.addTo(map); 
-    });
+        geojsonLayer.on('data:loaded', function() {
+            geojsonLayer.addTo(map); 
+        });
 
-    createLegend();
+        createLegend();
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
     };
 })();

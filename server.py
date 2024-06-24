@@ -28,77 +28,228 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         self.end_headers()
 
     def do_GET(self):
-        parsed_path = urlparse(self.path)
+
         print(self.path)
 
-        if parsed_path.path == "/home":
-            call_plsql.get_regions_by_attack_count(cur, conn)
-            call_plsql.get_general_countries(cur, conn)
-            call_plsql.get_general_attacks(cur, conn)
-            call_plsql.get_general_targets(cur, conn)
-            call_plsql.get_count_attacks_by_year(cur, conn)
+        if self.path.startswith('/index'):
+            print("Sunt in index")
+
+            data1 = call_plsql.get_regions_by_attack_count(cur, conn)
+            data2 = call_plsql.get_general_countries(cur, conn)
+            data3 = call_plsql.get_general_attacks(cur, conn)
+            data4 = call_plsql.get_general_targets(cur, conn)
+            data5 = call_plsql.get_count_attacks_by_year(cur, conn)
+
+            print("Data1: ", data1)
+
+            response = {'message': 'OK',
+                        'status': 'success',
+                        'data1': data1,
+                        'data2': data2,
+                        'data3': data3,
+                        'data4': data4,
+                        'data5': data5}
 
             self.send_response(200)
             self._set_cors_headers()
+            self.send_header('Content-Type', 'application/json')
             self.end_headers()
-            self.wfile.write(b'ok')
+            try:
+                self.wfile.write(json.dumps(response).encode('utf-8'))
+            except ConnectionAbortedError as e:
+                print(f"Error writing response: {e}")
 
-        elif self.path.startswith('/result'):
+        elif self.path.startswith('/reg_result'):
             print("sunt in api")
             query_params = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
 
             if 'type' in query_params and 'name' in query_params:
-                entity_type = query_params['type'][0]
                 entity_name = query_params['name'][0]
+                # print(entity_type, entity_name)
 
-                if entity_type == 'region':
-                    print("region")
+                data1 = call_plsql.get_coutries_in_reg(cur, conn, entity_name)
+                data2 = call_plsql.get_attacks_in_reg(cur, conn, entity_name)
+                data3 = call_plsql.get_targets_in_regg(cur, conn, entity_name)
+                data4 = call_plsql.get_attacks_by_year_in_reg(cur, conn, entity_name)
 
-                    data1 = call_plsql.get_coutries_in_reg(cur, conn, entity_name)
-                    data2 = call_plsql.get_attacks_in_reg(cur, conn, entity_name)
-                    data3 = call_plsql.get_targets_in_regg(cur, conn, entity_name)
-                    data4 = call_plsql.get_attacks_by_year_in_reg(cur, conn, entity_name)
+                print("sunt in region1")
 
-                    print("sunt in region1")
+                response = {'message': 'OK',
+                            'status': 'success',
+                            'data1': data1,
+                            'data2': data2,
+                            'data3': data3,
+                            'data4': data4}
 
-                    response = {'message': 'OK',
-                                'status': 'success',
-                                'data1': data1,
-                                'data2': data2,
-                                'data3': data3,
-                                'data4': data4}
+                print("sunt in region2")
 
-                    print("sunt in region2")
-
-                    self.send_response(200)
-                    self._set_cors_headers()
-                    self.send_header('Content-Type', 'application/json')
-                    self.end_headers()
-                    try:
-                        self.wfile.write(json.dumps(response).encode('utf-8'))
-                    except ConnectionAbortedError as e:
-                        print(f"Error writing response: {e}")
-                
-                else:
-                    self.send_response(400)
-                    self._set_cors_headers()
-                    self.end_headers()
-                    try:
-                        self.wfile.write(b'Invalid entity type')
-                    except ConnectionAbortedError as e:
-                        print(f"Error writing response: {e}")
+                self.send_response(200)
+                self._set_cors_headers()
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                try:
+                    self.wfile.write(json.dumps(response).encode('utf-8'))
+                except ConnectionAbortedError as e:
+                    print(f"Error writing response: {e}")
 
             else:
                 # Dacă lipsește parametrul necesar "name", returnăm un cod de eroare 400 (Bad Request)
                 self.send_response(400)
+
                 self._set_cors_headers()
                 self.end_headers()
                 self.wfile.write(b'Missing required parameter "name"')
+
+        elif self.path.startswith('/country_result'):
+
+            query_params = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
+
+            if 'type' in query_params and 'name' in query_params:
+                entity_name = query_params['name'][0]
+                print("country")
+
+                data1 = call_plsql.get_provstates_in_country(cur, conn, entity_name)
+                data2 = call_plsql.get_attacks_in_country(cur, conn, entity_name)
+                data3 = call_plsql.get_targets_in_country(cur, conn, entity_name)
+                data4 = call_plsql.get_attacks_by_year_in_country(cur, conn, entity_name)
+                print(data1)
+
+                response = {'message': 'OK',
+                            'status': 'success',
+                            'data1': data1,
+                            'data2': data2,
+                            'data3': data3,
+                            'data4': data4
+                            }
+
+                self.send_response(200)
+                self._set_cors_headers()
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                try:
+                    self.wfile.write(json.dumps(response).encode('utf-8'))
+                except ConnectionAbortedError as e:
+                    print(f"Error writing response: {e}")
+
+            else:
+                # Dacă lipsește parametrul necesar "name", returnăm un cod de eroare 400 (Bad Request)
+                self.send_response(400)
+
+                self._set_cors_headers()
+                self.end_headers()
+                self.wfile.write(b'Missing required parameter "name"')
+
+        elif self.path.startswith('/provstate_result'):
+
+            query_params = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
+
+            if 'type' in query_params and 'name' in query_params:
+                entity_name = query_params['name'][0]
+                print("provstate")
+
+                data1 = call_plsql.get_cities_in_provstate(cur, conn, entity_name)
+                data2 = call_plsql.get_attacks_in_provstate(cur, conn, entity_name)
+                data3 = call_plsql.get_targets_in_provstate(cur, conn, entity_name)
+                data4 = call_plsql.get_attacks_by_year_in_provstate(cur, conn, entity_name)
+                print("data provstate", data1)
+
+                response = {'message': 'OK',
+                            'status': 'success',
+                            'data1': data1,
+                            'data2': data2,
+                            'data3': data3,
+                            'data4': data4
+                            }
+
+                self.send_response(200)
+                self._set_cors_headers()
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                try:
+                    self.wfile.write(json.dumps(response).encode('utf-8'))
+                except ConnectionAbortedError as e:
+                    print(f"Error writing response: {e}")
+
+            else:
+                # Dacă lipsește parametrul necesar "name", returnăm un cod de eroare 400 (Bad Request)
+                self.send_response(400)
+
+                self._set_cors_headers()
+                self.end_headers()
+                self.wfile.write(b'Missing required parameter "name"')
+
+        elif self.path.startswith('/city_result'):
+            query_params = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
+
+            if 'type' in query_params and 'name' in query_params:
+                entity_name = query_params['name'][0]
+                print("city")
+
+                events = call_plsql.get_city_events(cur, conn, entity_name)
+                data2 = call_plsql.get_attacks_in_city(cur, conn, entity_name)
+                data3 = call_plsql.get_targets_in_city(cur, conn, entity_name)
+                data4 = call_plsql.get_attacks_by_year_in_city(cur, conn, entity_name)
+
+                events_data = []
+                for event in events:
+                    event_date = event[1]
+                    event_year = event_date.year
+
+                    events_data.append({
+                        'event_id': event[0],
+                        'date': event[1].strftime('%Y-%m-%d'),
+                        'year': event_year,
+                        'summary': event[2],
+                        'city_name': event[3],
+                        'provstate_name': event[4],
+                        'country_name': event[5],
+                        'region_name': event[6],
+                        'attack_name': event[7],
+                        'target_name': event[8],
+                        'subtarget_name': event[9],
+                        'corp': event[10],
+                        'spec_target': event[11],
+                        'criminal': event[12],
+                        'motive': event[13]
+                    })
+
+                response = {
+                    'message': 'OK',
+                    'status': 'success',
+                    'data1': events_data,
+                    'data2': data2,
+                    'data3': data3,
+                    'data4': data4,
+                }
+
+                print("data1: ", events_data)
+                print("data2: ", data2)
+                print("data3: ", data3)
+                print("data4: ", data4)
+
+                self.send_response(200)
+                self._set_cors_headers()
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                try:
+                    self.wfile.write(json.dumps(response).encode('utf-8'))
+                except ConnectionAbortedError as e:
+                    print(f"Error writing response: {e}")
+
+            else:
+                # Dacă lipsește parametrul necesar "name", returnăm un cod de eroare 400 (Bad Request)
+                self.send_response(400)
+
+                self._set_cors_headers()
+                self.end_headers()
+                self.wfile.write(b'Missing required parameter "name"')
+
         else:
-            # Dacă ruta nu corespunde, returnăm un cod de eroare 404 (Not Found)
             self.send_response(404)
+
+            self._set_cors_headers()
             self.end_headers()
-            self.wfile.write(b'Not Found')
+            self.wfile.write(b'Page not found')
 
     def do_POST(self):
         if self.path == "/login":

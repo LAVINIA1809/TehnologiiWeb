@@ -1,3 +1,20 @@
+function createChartContainer(id, title) {
+    const container = document.createElement('div');
+    container.className = 'chart2';
+    
+    const chartTitle = document.createElement('h3');
+    chartTitle.id = `${id}Title`;
+    chartTitle.innerText = title;
+    container.appendChild(chartTitle);
+
+    const canvas = document.createElement('canvas');
+    canvas.id = id;
+    container.appendChild(canvas);
+
+    document.getElementById('chart-container').appendChild(container);
+}
+
+
 async function getResults() {
     try {
         const urlParams = new URLSearchParams(window.location.search);
@@ -5,20 +22,20 @@ async function getResults() {
         let entityName = urlParams.get('name');
 
         if (entityType && entityName) {
-            url = `http://localhost:8000/result?type=${entityType}&name=${entityName}`;
+            console.log(entityType)
             switch (entityType) {
                 case 'region':
                     document.getElementById('pageTitle').innerText = `Results for region: ${entityName}`;
                     
-                    try {
-                        
-                            
-                             fetch(url, {
+                    try {   
+                             fetch(`http://localhost:8000/reg_result?type=${entityType}&name=${entityName}`, {
                                  method: 'GET'
                              })
                              .then(response => response.json())
                              .then(data => {
                                  console.log(data.data1);
+                                 entityName = entityName.replace(/\s+/g, '');
+                                const mapLink = `maps/${entityName}.geojson`;
                                  makeCountrysMap(data.data1, mapLink);
                                  console.log(data.data2);
                                  createBarChart(data.data2, 'Type of attacks', 'canvas5')
@@ -27,64 +44,128 @@ async function getResults() {
                                  console.log(data.data4);
                                  createBarChart(data.data4, 'Attacks every year', 'canvas7')
                              });
-
-                             console.log("salut3")
-                
-                    
-                        entityName = entityName.replace(/\s+/g, '');
-                        const mapLink = `maps/${entityName}.geojson`;
-
-                        console.log("salut")
-
-                        console.log("am iesit de aici");
                         return;
                     } catch (error) {
                         console.error('Fetch error:', error);
                     }
                     break;
-                // case 'country':
-                //     document.getElementById('pageTitle').innerText = `Results for country: ${entityName}`;
-                    
-                //     try {
-                //         const response = await fetch(`http://localhost:8000/result?type=${entityType}&name=${entityName}`, {
-                //             method: 'GET'
-                //         });
-            
-                //         if (!response.ok) {
-                //             console.error('Response not ok:', response.status);
-                //             return;
-                //         }
-            
-                //         const data1 = await response.json();
-                //         console.log('Get successful', data1);
 
-                //         entityName = entityName.replace(/\s+/g, '');
-                //         const mapLink = `maps/${entityName}.geojson`;
-            
-                //         // Așteaptă ca toate datele să fie procesate înainte de a continua
-                //         await Promise.all([
-                //             fetch('data2.json')
-                //             .then(response => response.json())
-                //             .then(data => {
-                                
-                //                 makeStatesMap(data, mapLink);
-                //             }),
-                //             fetch('data5.json')
-                //                 .then(response => response.json())
-                //                 .then(data => createBarChart(data, 'Type of attacks', 'canvas5')),
-                //             fetch('data6.json')
-                //                 .then(response => response.json())
-                //                 .then(data => createBarChart(data, 'Attacks on target type', 'canvas6')),
-                //             fetch('data7.json')
-                //                 .then(response => response.json())
-                //                 .then(data => createBarChart(data, 'Attacks every year', 'canvas7'))
-                //         ]);
-            
-                //     } catch (error) {
-                //         console.error('Fetch error:', error);
-                //     }
+                case 'country':
+
+                    document.getElementById('pageTitle').innerText = `Results for country: ${entityName}`;
                     
-                //     break;
+                    try {
+                             fetch(`http://localhost:8000/country_result.html?type=${entityType}&name=${entityName}`, {
+                                 method: 'GET'
+                             })
+                             .then(response => response.json())
+                             .then(data => {
+                                entityName = entityName.replace(/\s+/g, '');
+                                const mapLink = `maps/${entityName}.geojson`;
+                                 console.log("Data 1 country", data.data1);
+                                 makeStatesMap(data.data1, mapLink);
+                                 console.log(data.data2);
+                                 createBarChart(data.data2, 'Type of attacks', 'canvas5')
+                                 console.log(data.data3);
+                                 createBarChart(data.data3, 'Attacks on target type', 'canvas6')
+                                 console.log(data.data4);
+                                 createBarChart(data.data4, 'Attacks every year', 'canvas7')
+                             });
+
+                        return;
+                    } catch (error) {
+                        console.error('Fetch error:', error);
+                    }
+                    break;
+
+                case 'provstate':
+
+                    document.getElementById('pageTitle').innerText = `Results for state/province: ${entityName}`;
+                    
+                    try {
+                             fetch(`http://localhost:8000/provstate_result.html?type=${entityType}&name=${entityName}`, {
+                                 method: 'GET'
+                             })
+                             .then(response => response.json())
+                             .then(data => {
+                                 console.log("Data 1 country", data.data1);
+                                 createPieChart(data.data1, 'Attacks in every city', 'canvas4');
+                                 console.log(data.data2);
+                                 createBarChart(data.data2, 'Type of attacks', 'canvas5')
+                                 console.log(data.data3);
+                                 createBarChart(data.data3, 'Attacks on target type', 'canvas6')
+                                 console.log(data.data4);
+                                 createBarChart(data.data4, 'Attacks every year', 'canvas7')
+                             });
+
+                        return;
+                    } catch (error) {
+                        console.error('Fetch error:', error);
+                    }
+                    break;
+
+                case 'city':
+
+                    document.getElementById('pageTitle').innerText = `Results for city: ${entityName}`;
+                    
+                    try {
+                            fetch(`http://localhost:8000/city_result.html?type=${entityType}&name=${entityName}`, {
+                                 method: 'GET'
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log(data.data1);
+                                const eventsList = document.getElementById('events-list');
+                        
+                                data.data1.forEach(event => {
+                                    const eventElement = document.createElement('div');
+                                    eventElement.innerHTML = `
+                                        
+                                        <h2>${event.year}</h2>
+                                        <p><span>Date:</span> ${event.date}</p>
+                                        <p><span>Region:</span> ${event.region_name}</p>
+                                        <p><span>Country:</span> ${event.country_name}</p>
+                                        <p><span>Provstate:</span> ${event.provstate_name}</p>
+                                        <p><span>City:</span> ${event.city_name}</p>
+                                        <p><span>Attack type:</span> ${event.attack_name}</p>
+                                        <p><span>Target:</span> ${event.target_name}</p>
+                                        <p><span>Subtarget:</span> ${event.subtarget_name}</p>
+                                        <p><span>Corp:</span> ${event.corp}</p>
+                                        <p><span>Specific target:</span> ${event.spec_target}</p>
+                                        <p><span>Criminal:</span> ${event.criminal}</p>
+                                        <p><span>Motive:</span> ${event.motive}</p>
+                                        <p><span>Summary:</span> ${event.summary}</p>
+                                    `;
+                        
+                                    eventsList.appendChild(eventElement);
+                                });
+                                
+                                if (data.data2.length >= 3) {
+                                    console.log(data.data2);
+                                    createChartContainer('canvas5', 'Type of attacks');
+                                    createBarChart(data.data2, 'Type of attacks', 'canvas5');
+                                }
+        
+                                if (data.data3.length >= 3) {
+                                    console.log(data.data3);
+                                    createChartContainer('canvas6', 'Attacks on target type');
+                                    createBarChart(data.data3, 'Attacks on target type', 'canvas6');
+                                }
+        
+                                if (data.data4.length >= 3) {
+                                    console.log(data.data4);
+                                    createChartContainer('canvas7', 'Attacks every year');
+                                    createBarChart(data.data4, 'Attacks every year', 'canvas7');
+                                }
+
+                             });
+
+                        return;
+                    } catch (error) {
+                        console.error('Fetch error:', error);
+                    }
+                    
+                    break;
                 default:
                     console.error('Invalid entity type:', entityType);
                     break;

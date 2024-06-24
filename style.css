@@ -541,6 +541,13 @@ h2
   align-self: center;
 }
 
+.chart1{
+  height: 40%;
+  width: 40%;
+  margin-top: 50px;
+  align-self: center;
+}
+
 .chart2{
   height: 60%;
   width: 60%;
@@ -577,6 +584,11 @@ h2
   width: 100%;
 }
 
+#map3 {
+  height: 600px;
+  width: 100%;
+}
+
 .legend {
   background-color: white;
   padding: 10px;
@@ -605,3 +617,29 @@ h2
   margin-bottom: 50px;
 }
 
+#events-list {
+  text-align: left; /* Aliniază textul la stânga */
+}
+
+#events-list div {
+  margin-bottom: 20px; /* Adaugă spațiu între evenimente */
+  border-bottom: 2px solid #d4a690; /* Adaugă o linie orizontală între evenimente */
+  padding-bottom: 20px;
+}
+
+#events-list h2 {
+  font-size: 24px; /* Mărește dimensiunea textului pentru titlu */
+  margin-top: 0; /* Elimină spațiul de deasupra titlului */
+}
+
+#events-list p {
+  font-size: 18px; /* Mărește dimensiunea textului pentru paragrafe */
+  margin-top: 10px;
+  
+}
+
+#events-list p span {
+  font-weight: bold; /* Titlurile în bold */
+  font-size: 20px; /* Mărește dimensiunea textului pentru titluri */
+  color: #d4a690; /* Culoare albastră pentru titluri */
+}

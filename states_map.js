@@ -1,7 +1,7 @@
 (function () {
     var map = L.map('map3').setView([0, 0], 2);
-    var colors = ['#FFEDA0', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026'];
-var thresholds = [0, 50, 100, 500, 1000, 5000, 10000];
+    var colors = ['#FFEDA0', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026','#4C0000'];
+var thresholds = [0, 25, 50, 100, 500, 1000, 5000, 10000];
 
     function createLegend() {
         var legend = L.control({ position: 'bottomleft' });
@@ -33,12 +33,13 @@ var thresholds = [0, 50, 100, 500, 1000, 5000, 10000];
     }
 
     function getColor(d) {
-        return d > 10000 ? colors[6] :
-               d > 5000 ? colors[5] :
-               d > 1000 ? colors[4] :
-               d > 500  ? colors[3] :
-               d > 100  ? colors[2] :
-               d > 50   ? colors[1] :
+        return d > 10000 ? colors[7] :
+               d > 5000 ? colors[6] :
+               d > 1000 ? colors[5] :
+               d > 500  ? colors[4] :
+               d > 100  ? colors[3] :
+               d > 50   ? colors[2] :
+               d > 25   ? colors[1] :
                           colors[0]
     }
 
@@ -60,32 +61,32 @@ var thresholds = [0, 50, 100, 500, 1000, 5000, 10000];
     function onEachFeature(feature, layer) {
         layer.on({
             click: function(e) {
-                const entityType = "state";
+                const entityType = "provstate";
             const entityName = feature.properties.name;
             
-            window.location.href = `result.html?type=${entityType}&name=${entityName}`;
+            window.location.href = `provstate_result.html?type=${entityType}&name=${entityName}`;
             }
         });
-        layer.bindPopup(feature.properties.region + ": " + (attackData2[feature.properties.region] || 0) + " atacuri");
+        layer.bindPopup(feature.properties.name + ": " + (attackData2[feature.properties.name] || 0) + " atacuri");
     }
 
-    window.makeCountrysMap = function(data, mapLink) {
+    window.makeStatesMap = function(data, mapLink) {
         attackData2 = preprocessData(data);
         //console.log("data: ", attackData2);
 
-    var geojsonLayer = new L.GeoJSON.AJAX(mapLink, {
-        style: style,
-        onEachFeature: onEachFeature
-    });
+        var geojsonLayer = new L.GeoJSON.AJAX(mapLink, {
+            style: style,
+            onEachFeature: onEachFeature
+        });
 
-    geojsonLayer.on('data:loaded', function() {
-        geojsonLayer.addTo(map); 
-    });
+        geojsonLayer.on('data:loaded', function() {
+            geojsonLayer.addTo(map); 
+        });
 
-    createLegend();
+        createLegend();
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
     };
 })();
