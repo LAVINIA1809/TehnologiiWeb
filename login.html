@@ -34,8 +34,10 @@
                     <input class="input" type="password" id="password" name="password" required>
                 </div>
 
-                <button type="submit" class="submit-button">Login</button>
                 <div id="error-message"></div>
+
+                <button type="submit" class="submit-button">Login</button>
+                <a id="forget_password" href="forgot_password.html"> Forgot password </a>
             </form>
         </div>
     </div>
@@ -62,8 +64,9 @@
 
                     localStorage.setItem('userFirstName', data.user.first_name);
                     localStorage.setItem('userLastName', data.user.last_name);
+                    localStorage.setItem('userEmail', data.user.email);
 
-                    window.location.href = 'successLogin.html';
+                    window.location.href = 'successPages/successLogin.html';
                 } else {
                     const errorMessage = document.getElementById('error-message');
                     const errorData = await response.json();

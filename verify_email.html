@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Global Terrorism </title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+
+    <header>
+        <div class="menu">
+            <a class="option" href="index.html"> HOME </a>
+            <a class="option" href="about.html"> ABOUT </a>
+            <a class="option" href="help.html"> HELP </a>
+            <a class="option" href="login.html"> LOGIN </a>
+        </div>
+    </header>
+
+    <div class="content home-content">
+        <h1 id="check_email"></h1>
+
+        <button type="submit" class="submit-button" onclick="window.location.href='login.html'">Back to Login</button>
+    </div>
+
+    <script>
+        async function verifyEmail(token) {
+            try {
+                const response = await fetch('http://localhost:8000/verify-email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ token })
+                });
+        
+                if (response.ok) {
+                    const data = await response.json();
+                    const successMessage = document.getElementById('check_email');
+                    successMessage.textContent = 'Email verified successfully! ';
+                    successMessage.style.display = 'block';
+                } else {
+                    const errorMessage = document.getElementById('check_email');
+                    const errorData = await response.json();
+                    errorMessage.textContent = 'Email verification failed: ' + errorData.message;
+                    errorMessage.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+
+        if (token) {
+            verifyEmail(token);
+        } else {
+            console.error('Token not found in URL');
+        }
+    </script>
+
+</body>
+
+</html>

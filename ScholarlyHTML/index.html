@@ -8,6 +8,18 @@
     <title> Global Terrorism Visualiser </title>
     <link rel="stylesheet" href="css/scholarly.min.css" />
     <script src="js/scholarly.min.js"></script>
+
+    <style>
+        
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        #C4 img {
+            margin-bottom: 20px; 
+        }
+    </style>
 </head>
 
 <body prefix="schema: http://schema.org">
@@ -50,9 +62,18 @@
             <p>
                 Python este un limbaj de programare versatil, usor de învatat si puternic, folosit in diverse domenii, inclusiv dezvoltarea web, analiza datelor si invatare automata. Cu o sintaxă simpla și expresiva,   acesta este utilizat in mod extensiv si pentru dezvoltarea de servere web. Cu Python, dezvoltatorii pot crea rapid si eficient servere web puternice si scalabile.
             </p>
-            <span>3.5</span> MongoDB
+            <span>3.5</span> PostgreSQL
             <p>
-                MongoDB este o bază de date NoSQL open-source orientată pe documente. Acestă bază de date beneficiază de suport din partea companiei 10gen. MongoDB face parte din familia sistemelor de baze de date NoSQL. Baza de date GLoT va contine cel putin colectiile "attacks" si "statistics".
+                PostgreSQL este un sistem de baze de date relaționale. Acesta permite folosirea limbajelor procedurale pentru a executa blocuri de cod direct în serverul de baze de date. Baza de date GLoT conține tabelele:
+                <ul>
+                    <li>"users", unde se stochează datele despre admini</li>
+                    <li>"regions", unde se regăsesc toate regiunile lumii</li>
+                    <li>"countries", care conține numele țărilor și id-ul regiunilor din care fac parte </li>
+                    <li>"provstates", care conține numele provinciilor și a statelor și id-ul țărilor de care aparțin</li>
+                    <li>"cities", care conține numele orașelor, id-ul provinciilor și al țărilor de care aparțin și coordonatele geografice</li>
+                    <li>"events", care conține toate evenimentele si detaliile despre acestea, incluzând cele din tabelele de mai sus</li>
+                </ul>
+                De asemena, am folosit funcții declarate în baza de date pentru a obține informații legate de frecvența evenimentelor în anumite locații. 
             </p>
             <span>3.6</span> Github
             <p>
@@ -64,7 +85,7 @@
         <h2>Interfata Aplicatiei</h2>
         <span> 4.1 </span> Home
         <p>
-            Pagina de home este alcatuita dintr-un header care contine link-uri catre celelalte pagini si un buton care redirecteaza utilizatorul la pagina de explorare/filtare a atentatelor teroriste din istorie. 
+            Pagina de home este alcatuita dintr-un header care contine link-uri catre celelalte pagini, un buton care redirecteaza utilizatorul la pagina de explorare/filtare a atentatelor teroriste din istorie,  două hărți interactive care arată frecvența atacurilor globale pentru fiecare regiune si țară și trei grafice dupa alte criterii. 
         </p>
         <span> 4.2 </span> About
         <p>
@@ -76,7 +97,7 @@
         </p>
         <span>4.4</span> Login
         <p>
-            Pe pagina de login se vor putea loga doar administratorii acestui site pentru a incarca mai multe date legate de diverse evenimente teroriste (incarcare de fisiere CSV), iar din acest motiv e posibil ca site-ul nostru sa fie updatat periodic cu noi informatii. Utilizatorii nu au nevoie de cont pentru a putea vizualiza si descarca informatiile de pe site, iar functionalitatile vor fi aceleasi pentru oricine ne va accesa site-ul web.
+            Pe pagina de login se vor putea loga doar administratorii acestui site pentru a incarca mai multe date legate de diverse evenimente teroriste, iar din acest motiv e posibil ca site-ul nostru sa fie updatat periodic cu noi informatii. Utilizatorii nu au nevoie de cont pentru a putea vizualiza si descarca informatiile de pe site, iar functionalitatile vor fi aceleasi pentru oricine ne va accesa site-ul web.
             Pentru logarea unui admin, acesta are nevoie in prealabil sa ii fie facut un cont de un admin deja existent (initial va fi doar un admin, care ulterior va crea conturile si pentru alti admini daca va fi cazul). Dupa ce are un cont creat si ii sunt asignate drepturile de acces ca si administrator, acesta trebuie sa furnizeze doar emailul si parola.
         </p>
         <span>4.5</span> Register
@@ -86,14 +107,27 @@
 
         <span>4.6</span> Explore
         <p>
-            Din aceasta pagina se realizeaza filtrarea multi-criteriala dupa numele tarii, numele orasului si anul atacului terorist. Prin acest tip de filtrare, utilizatorii primesc informatii mai specifice si mai punctuale despre evenimentele cautate. 
+            Din aceasta pagina se realizeaza filtrarea multi-criteriala dupa numele regiunii, numele tarii, numele provinciei sau a statului si/sau numele orasului atacului terorist. Prin acest tip de filtrare, utilizatorii primesc informatii mai specifice si mai punctuale despre evenimentele cautate. 
         </p>
 
         <span>4.7</span> Result
         <p>
-            Pe pagina cu rezultate se pot vizualiza date in mai multe formate despre atacurile teroriste si de asemenea vor fi disponibile statistici pentru tara, orasul si perioada aleasa. Pe langa vizualizarea informatiilor, utilizatorii pot descarca si rapoarte cu statistici, generate in formatele CSV, JSON, PNG si SVG. Nu exista o limitare la numarul de descarcari pe care le pot realiza utilizatorii. 
+            Pe pagina cu rezultate se pot vizualiza date in mai multe formate despre atacurile teroriste si de asemenea vor fi disponibile statistici pentru locatia aleasa. Pe langa vizualizarea informatiilor, utilizatorii pot descarca si rapoarte cu statistici, generate in formatele CSV, PNG si SVG. Nu exista o limitare la numarul de descarcari pe care le pot realiza utilizatorii. 
         </p>
 
+
+    </section id="C4">
+        <h2>Diagrame C4</h2>
+
+        <div>
+            <img src="../imagini/C4-L1.png" alt="Diagrama C4 Nivelul 1">
+            <img src="../imagini/C4-L2.png" alt="Diagrama C4 Nivelul 2">
+            <img src="../imagini/C4-L3.png" alt="Diagrama C4 Nivelul 3">
+            <img src="../imagini/C4-fe-L3.png" alt="Diagrama C4 Nivelul 3 Frontend">
+            <img src="../imagini/C4-L4.png" alt="Diagrama C4 Nivelul 4">
+        </div>
+
+    <section>
 
     </section>
 

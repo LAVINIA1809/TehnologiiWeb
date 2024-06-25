@@ -7,6 +7,8 @@
     <title> Global Terrorism </title>
     <link rel="stylesheet" type="text/css" href="style.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 </head>
 
 <body>
@@ -39,13 +41,13 @@
             <form class="form">
                 <div class="group">
                     <label name="File" class="lable">File type:</label>
-                    <select name="File" class="input input-select" required>
-                        <option class="select-option" value="CSV">CSV</option>
-                        <option class="select-option" value="JSON">JSON</option>
+                    <select name="File" class="input input-select" id="fileType" required>
+                        <option class="select-option" value="PNG">PNG</option>
+                        <option class="select-option" value="SVG">SVG</option>
                     </select>                    
                 </div>
             </form>
-            <button class="button">Download</button>
+        <button class="button" id="downloadButton">Download</button>
         </div>
         <p class="text">
             If you want to explore other periods of time or locations you can go to:
@@ -62,5 +64,56 @@
     <script src="results.js"></script>
     <script src="states_map.js"></script>
     <script src="charts.js"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const name = urlParams.get('name');
+        function canvasToBlob(canvas) {
+            return new Promise((resolve) => {
+                canvas.toBlob(blob => {
+                    resolve(blob);
+                }, 'image/png');
+            });
+        }
+
+        function canvasToSVG(canvas) {
+            const svgString = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="${canvas.width}" height="${canvas.height}">
+                    <image width="${canvas.width}" height="${canvas.height}" href="${canvas.toDataURL('image/svg+xml')}" />
+                </svg>`;
+            const blob = new Blob([svgString], { type: 'image/svg+xml' });
+            return blob;
+        }        
+
+        async function downloadCharts() {
+            const fileType = document.getElementById('fileType').value;
+            const zip = new JSZip();
+            const elements = [
+                { id: 'map2', type: 'html', title: 'Attacks in every country' },
+                { id: 'canvas7', type: 'canvas', title: 'Attacks every year' },
+                { id: 'canvas5', type: 'canvas', title: 'Type of attacks' },
+                { id: 'canvas6', type: 'canvas', title: 'Attacks on target type' }
+            ];
+
+            for (const { id, type, title } of elements) {
+                let blob;
+                const element = document.getElementById(id);
+                if (type === 'html') {
+                    const imagePath = `captures/captura_${name}`;
+                    blob = await fetch(imagePath).then(r => r.blob());
+                } else if (fileType === 'PNG') {
+                    blob = await canvasToBlob(element);
+                } else if (fileType === 'SVG') {
+                    blob = canvasToSVG(element);
+                }
+                zip.file(`${title.replace(/\s+/g, '_')}.${fileType.toLowerCase()}`, blob);
+            }
+
+            zip.generateAsync({ type: 'blob' }).then(function(content) {
+                saveAs(content, 'charts.zip');
+            });
+        }
+
+        document.getElementById('downloadButton').addEventListener('click', downloadCharts);
+    </script>
 </body>
 </html>

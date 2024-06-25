@@ -36,7 +36,7 @@
 
                 <div class="group">
                     <label for="state" class="lable">State:</label>
-                    <input class="input" type="name" id="state" name="state" required>                    
+                    <input class="input" type="name" id="state" name="state">                    
                 </div>
 
                 <div class="group">
@@ -82,12 +82,12 @@
 
                 <div class="group">
                     <label for="corp" class="lable">Corp:</label>
-                    <input class="input" id="corp" name="corp" required>
+                    <input class="input" id="corp" name="corp">
                 </div>
 
                 <div class="group">
                     <label for="spec-target" class="lable">Specific target:</label>
-                    <input class="input" id="spec_target" name="spec-target" required>
+                    <input class="input" id="spec_target" name="spec-target">
                 </div>
 
                 <div class="group">
@@ -135,7 +135,7 @@
             const motive = document.getElementById('motive').value;
 
             try {
-                const response = await fetch('http://localhost:8000/addEvent', {
+                const response = await fetch('http://localhost:8000/add-event', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -147,7 +147,7 @@
                 if (response.ok) {
                     const data = await response.json();
                     console.log('New event created', data);
-                    window.location.href = 'successUpload.html';
+                    window.location.href = 'successPages/successUpload.html';
                 } else {
                     console.error('Upload failed', response.statusText);
                 }

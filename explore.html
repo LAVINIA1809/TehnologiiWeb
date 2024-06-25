@@ -10,67 +10,73 @@
 
 <body>
 
-    <header>
-        <div class="menu">
-            <a class="option" href="index.html"> HOME </a>
-            <a class="option" href="about.html"> ABOUT </a>
-            <a class="option" href="help.html"> HELP </a>
-            <a class="option" href="login.html"> LOGIN </a>
-        </div>
-    </header>
+    <header id="header"></header>
      
     <div class="content">
         <h1 class="title"> Explore terrorism events throughout history </h1>
             
         <div class="cont">
-            <form class="form">
+            <form class="form" id="searchResults">
                 <div class="group">
-                    <label name="Country" class="lable">Country:</label>
-                    <select name="Country" class="input input-select" required>
-                        <option class="select-option" value="Japan">Japan</option>
-                        <option class="select-option" value="Turkey">Turkey</option>
-                        <option class="select-option" value="France">France</option>
-                        <option class="select-option" value="Mexic">Mexic</option>
-                    </select>                    
-                </div>
-            
-                <div class="group">
-                    <label name="City" class="lable">City:</label>
-                    <select name="City" class="input input-select">
-                        <option class="select-option" value="Tokyo">Tokyo</option>
-                        <option class="select-option" value="Paris">Paris</option>
-                    </select>   
+                    <label for="region" class="lable">Region:</label>
+                    <input class="input" type="name" id="region" name="region">                    
                 </div>
 
                 <div class="group">
-                    <label name="Year" class="lable">Year:</label>
-                    <select name="Year" class="input input-select">
-                        <option class="select-option" value="2017">2017</option>
-                        <option class="select-option" value="2016">2016</option>
-                        <option class="select-option" value="2015">2015</option>
-                        <option class="select-option" value="2014">2014</option>
-                        <option class="select-option" value="2013">2013</option>
-                        <option class="select-option" value="2012">2012</option>
-                        <option class="select-option" value="2011">2011</option>
-                        <option class="select-option" value="2010">2010</option>
-                        <option class="select-option" value="2009">2009</option>
-                        <option class="select-option" value="2008">2008</option>
-                        <option class="select-option" value="2007">2007</option>
-                        <option class="select-option" value="2006">2006</option>
-                        <option class="select-option" value="2005">2005</option>
-                        <option class="select-option" value="2004">2004</option>
-                        <option class="select-option" value="2003">2003</option>
-                        <option class="select-option" value="2002">2002</option>
-                        <option class="select-option" value="2001">2001</option>
-                    </select>   
+                    <label for="country" class="lable">Country:</label>
+                    <input class="input" type="name" id="country" name="country">                    
                 </div>
+
+                <div class="group">
+                    <label for="state" class="lable">State:</label>
+                    <input class="input" type="name" id="state" name="state">                    
+                </div>
+
+                <div class="group">
+                    <label for="email" class="lable">City:</label>
+                    <input class="input" id="city" name="city">                    
+                </div>
+
+                <button type="submit" class="submit-button">Search results</button>
             </form>
-
-            <button class="submit-button" onclick="window.location.href='result.html'">Search results</button>
-    
         </div>
-
     </div>
- 
+
+    <script src="verif_header.js"></script>
+    <script>
+        document.getElementById('searchResults').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const region = document.getElementById('region').value;
+            const country = document.getElementById('country').value;
+            const state = document.getElementById('state').value;
+            const city = document.getElementById('city').value;
+
+            try {
+                if (city.trim().length !== 0){
+                    const entityType = 'city';
+                    let entityName = city;
+                    window.location.href = `city_result.html?type=${entityType}&name=${entityName}`;
+                }
+                else if (state.trim().length !== 0){
+                    const entityType = 'state';
+                    let entityName = state;
+                    window.location.href = `provestate_result.html?type=${entityType}&name=${entityName}`;
+                }
+                else if (country.trim().length !== 0){
+                    const entityType = 'country';
+                    let entityName = country;
+                    window.location.href = `country_result.html?type=${entityType}&name=${entityName}`;
+                }
+                else if (region.trim().length !== 0){
+                    const entityType = 'region';
+                    let entityName = region;
+                    window.location.href = `reg_result.html?type=${entityType}&name=${entityName}`;
+                } 
+        } catch (error) {
+            console.error('Error:', error);
+        }
+            });
+    </script>
  </body>
-</html>
+</html> 

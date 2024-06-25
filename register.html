@@ -85,7 +85,7 @@
                 if (response.ok) {
                     const data = await response.json();
                     console.log('Register successful. A new account has been created', data);
-                    window.location.href = 'successRegister.html';
+                    window.location.href = 'successPages/successRegister.html';
                 } else {
                     const errorMessage = document.getElementById('error-message');
                     const errorData = await response.json();

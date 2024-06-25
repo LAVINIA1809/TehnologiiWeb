@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Global Terrorism </title>
+    <link rel="stylesheet" type="text/css" href="../style.css">
+</head>
+
+<body>
+
+    <header>
+        <div class="menu">
+            <a class="option" href="../homeLogged.html"> HOME </a>
+            <a class="option" href="../addEvent.html"> ADD EVENT </a>
+            <a class="option" href="../register.html"> REGISTER </a>
+            <a class="option" id="accountInfo" href="../admin.html"></a>
+        </div>
+    </header>
+
+    <div class="content home-content">
+    <h1 class="title"> A new event was uploaded successfully! </h1>
+    <button type="submit" class="submit-button" onclick="window.location.href='../homeLogged.html'">Back to Home Page</button>
+    </div>
+
+    <script>
+        const firstName = localStorage.getItem('userFirstName');
+        const lastName = localStorage.getItem('userLastName');
+
+        const accountInfoDiv = document.getElementById('accountInfo');
+        accountInfoDiv.style.whiteSpace = 'pre-line';
+        accountInfoDiv.textContent = `ACCOUNT:\n${firstName} ${lastName}`;
+    </script>
+
+    </body>
+</html>

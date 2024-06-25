@@ -643,3 +643,32 @@ h2
   font-size: 20px; /* Mărește dimensiunea textului pentru titluri */
   color: #d4a690; /* Culoare albastră pentru titluri */
 }
+
+#error-message, #email-error-message, #password-error-message
+{
+  color: red;
+  font-weight: bold;
+  font-size: 20px;
+  margin-top: 15px;
+}
+
+#accountInfo {
+  position: absolute;
+  top: -13px;
+  right: 15px;
+}
+
+#forget_password 
+{
+  margin-top: 15px;
+  margin-bottom: 15px;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 18px;
+}
+
+#forget_password:hover
+{
+  color: #d4a690;
+  font-weight: bold;
+  font-size: 18px;
+}
