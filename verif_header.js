@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Utilizatorul este logat
         header.innerHTML = `
         <div class="menu">
-            <a class="option current-page" href="homeLogged.html"> HOME </a>
+            <a class="option" href="homeLogged.html"> HOME </a>
             <a class="option" href="addEvent.html"> ADD EVENT </a>
             <a class="option" href="register.html"> REGISTER </a>
             <a class="option" id="accountInfo" href="admin.html"></a>

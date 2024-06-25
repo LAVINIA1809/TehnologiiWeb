@@ -49,7 +49,7 @@
 
             const region = document.getElementById('region').value;
             const country = document.getElementById('country').value;
-            const state = document.getElementById('state').value;
+            const provstate = document.getElementById('state').value;
             const city = document.getElementById('city').value;
 
             try {
@@ -58,10 +58,10 @@
                     let entityName = city;
                     window.location.href = `city_result.html?type=${entityType}&name=${entityName}`;
                 }
-                else if (state.trim().length !== 0){
-                    const entityType = 'state';
-                    let entityName = state;
-                    window.location.href = `provestate_result.html?type=${entityType}&name=${entityName}`;
+                else if (provstate.trim().length !== 0){
+                    const entityType = 'provstate';
+                    let entityName = provstate;
+                    window.location.href = `provstate_result.html?type=${entityType}&name=${entityName}`;
                 }
                 else if (country.trim().length !== 0){
                     const entityType = 'country';
